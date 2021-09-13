@@ -9,6 +9,8 @@ public class Cell{
     HashSet<Integer> notes = new HashSet<Integer>();
     int n;
 
+    //public void setWriteTo(java.lang.PrintStream ps){System.out=ps;}
+    
     public Cell(int r, int c){row=r;col=c;}
     public void setValue(int v){value=v;}
     public int getValue(){return value;}
@@ -46,5 +48,24 @@ public class Cell{
 				notes.remove(new Integer(cell.value));
 			}
     	}
+    }
+	public void prettyPrintNotes(){
+		int spaces = 8;
+    	Iterator<Integer> nit = notes.iterator();
+		while(nit.hasNext()) {
+			Integer itgr = nit.next();
+			System.out.format("%1d",itgr);
+			--spaces;
+		}
+		while(spaces-- > 1)System.out.format(" ");
+		prettyVertical(col);
+    }
+    public void prettyPrintValue(){
+    	System.out.format("   %1d   ",value);
+    	prettyVertical(col);
+    }
+    public void prettyVertical(int col) {
+    	if(col%3 != 2 ) System.out.format("|");
+    	else System.out.format("#");
     }
 }
