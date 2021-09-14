@@ -24,30 +24,41 @@ public class Aid{
 	static String currentPath;
     static Cell[][] c;
     static byte[] bytes;
+    public static void Usage(){
+    	System.out.println("Usage: java Aid <inputfile> [<optionaloutputfile>]");
+    }
     public static void main(String[] args) throws IOException{
-    	if(args.length>1){
-//TODO: set filename, edit ~37 to use it
-			if(args.length>2){
-				PrintStream o = new PrintStream(new File(args[1]));
-				System.setOut(o);
-			}
+    	String filename="";
+		if(args.length>1){
+			PrintStream o = new PrintStream(new File(args[1]));
+			System.setOut(o);
+		}
+    	if(args.length>0){
+    		filename=args[0];
     	}
-    	currentPath = System.getProperty("user.dir");
+    	else{
+    		Usage();
+    		System.exit(0);
+    	}
         createCells();
-		readInitFile("s1.txt");
+		readInitFile(filename);
 		processValues();
 		showAll();
 		computeNeighbors();
 		computeNotes();
 //dumpAll();
 //dump(0,0);dump(4,1);
-//System.out.println("");
 		prettyPrint();
     }
     static void readInitFile(String filename) throws IOException {
-    	Path p1 = Paths.get(currentPath + "/" + filename);
-        bytes = Files.readAllBytes(p1);
-//System.out.println(new String(bytes));
+    	try{
+			currentPath = System.getProperty("user.dir");
+			Path p1 = Paths.get(currentPath + "/" + filename);
+			bytes = Files.readAllBytes(p1);
+        } catch(Exception e) {
+        	System.err.println(e);
+        	System.exit(1);
+        }
 	}
 	static void createCells(){
     	c = new Cell[9][9];
@@ -72,12 +83,12 @@ public class Aid{
 			for(int col=0; col<9; ++col){
 				dump(row,col);
 			}
-			System.out.println("");
+			System.err.println("");
 		}
 	}
 	static void dump(int row, int col){
-		System.out.print(c[row][col]);
-		System.out.print("  ");
+		System.err.print(c[row][col]);
+		System.err.print("  ");
 	}
 		
 	static void showAll(){
