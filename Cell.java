@@ -5,7 +5,7 @@ import java.util.*;
 public class Cell{
 	int row,col;
     int value;
-    ArrayList<Cell> nbr = new ArrayList<Cell>();
+    ArrayList<Cell> neighbor = new ArrayList<Cell>();
     HashSet<Integer> notes = new HashSet<Integer>();
     int n;
 
@@ -27,24 +27,39 @@ public class Cell{
     	for(int i=r0; i<r0+3; ++i){
     		for(int j=c0; j<c0+3; ++j){
     			if(i==row && j==col)continue;
-     			nbr.add(c[i][j]);
+     			neighbor.add(c[i][j]);
      		}
     	}
     	//row
     	for(int j=0; j<9; ++j){
    			if(j==col)continue;
-    		nbr.add(c[row][j]);
+    		neighbor.add(c[row][j]);
     	}
     	//column
     	for(int i=0; i<9; ++i){
-    		if(i==col)continue;
-    		nbr.add(c[i][col]);
+    		if(i==row)continue;
+    		neighbor.add(c[i][col]);
     	}
-    }
+	}
+	public void dumpNbr(){
+		System.err.print(row+""+col+": ");
+		for(Cell cell : neighbor){
+			System.err.print(cell.row);
+			System.err.print(cell.col+" ");
+		}
+		System.err.print("\n");
+	}
+	public void dumpNbrVal(){
+		System.err.print(row+""+col+":");
+		for(Cell cell : neighbor){
+			System.err.print("  "+cell.value);
+		}
+		System.err.print("\n");
+	}
     public void computeNotes(Cell[][] c){
     	if(value==0){
 			for(int i=1; i<10; ++i)notes.add(new Integer(i));
-			for(Cell cell : nbr){
+			for(Cell cell : neighbor){
 				notes.remove(new Integer(cell.value));
 			}
     	}

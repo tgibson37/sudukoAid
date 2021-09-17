@@ -10,15 +10,6 @@ import java.nio.file.Paths;
  *	exactly 9 characters plus a newline. 90 bytes total.
  *	Use spaces or zeros for empty cells, numerals elsewhere.
  *	Example: s1.txt.
- 
- ile.
-        PrintStream o = new PrintStream(new File("A.txt"));
-  
-        // Store current System.out before assigning a new value
-        PrintStream console = System.out;
-  
-        // Assign o to output stream
-        System.setOut(o);
  */
 public class Aid{
 	static String currentPath;
@@ -43,7 +34,7 @@ public class Aid{
         createCells();
 		readInitFile(filename);
 		processValues();
-		showAll();
+//		showAll();
 		computeNeighbors();
 		computeNotes();
 //dumpAll();

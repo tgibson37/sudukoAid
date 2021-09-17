@@ -8,9 +8,7 @@ Compile and test:
 	java Aid
 		Result: Usage
 	java Aid s1.txt
-		Result: A good run: 
-			The initial cell values taken from s1.txt but spaced more readable.
-			The pretty print of the Suduko with notations for empty cells.
+		Result: The pretty print of the Suduko with notations for empty cells
 	java Aid s1.txt s1.notes
 		Same output but into created file s1.notes
-(Sept/14/2021)
+(Sept/17/2021)
