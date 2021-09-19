@@ -34,12 +34,28 @@ public class Aid{
         createCells();
 		readInitFile(filename);
 		processValues();
-//		showAll();
+		showAll();
 		computeNeighbors();
 		computeNotes();
 //dumpAll();
 //dump(0,0);dump(4,1);
 		prettyPrint();
+		patterns();
+    }
+    static void patterns(){
+    	patOnesy();
+//    	patMatchedPair()
+//    	pat322();
+//    	patCycle();
+    }
+    static void patOnesy(){
+    	int s=0;
+    	for(int row=0; row<9; ++row){
+    		for(int col=0; col<9; ++col){
+    			s=c[row][col].notes.size();
+    			if(s==1)System.out.format("Onesy at %d%d\n",row,col);
+    		}
+    	}
     }
     static void readInitFile(String filename) throws IOException {
     	try{

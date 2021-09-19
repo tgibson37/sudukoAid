@@ -8,8 +8,6 @@ public class Cell{
     ArrayList<Cell> neighbor = new ArrayList<Cell>();
     HashSet<Integer> notes = new HashSet<Integer>();
     int n;
-
-    //public void setWriteTo(java.lang.PrintStream ps){System.out=ps;}
     
     public Cell(int r, int c){row=r;col=c;}
     public void setValue(int v){value=v;}
