@@ -6,7 +6,7 @@ public class Cell{
 	int row,col;
     int value;
     ArrayList<Cell> neighbor = new ArrayList<Cell>();
-    HashSet<Integer> notes = new HashSet<Integer>();
+    TreeSet<Integer> notes = new TreeSet<Integer>();
     int n;
     
     public Cell(int r, int c){row=r;col=c;}
@@ -38,6 +38,11 @@ public class Cell{
     		if(i==row)continue;
     		neighbor.add(c[i][col]);
     	}
+	}
+	public void dump(){
+		System.err.print("C"+row+col);
+		if(value==0)System.err.print(notes);
+		else System.err.print("="+value);
 	}
 	public void dumpNbr(){
 		System.err.print(row+""+col+": ");
