@@ -46,6 +46,9 @@ public class Aid{
 //dumpAll();
 //dump(0,0);dump(4,1);
 		prettyPrint();
+		Container con = new Container(3,4,BLK);
+		System.out.println(con.uniques());
+		System.out.println(con.matchedPair());
     }
     static void readInitFile(String filename) throws IOException {
     	try{
