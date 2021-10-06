@@ -18,6 +18,14 @@ public class Cell{
     		+"("+notes.toString()+")"
     		+"="+Integer.toString(value);
     }
+    public int[] notes(){
+    	List<Integer> arr = new ArrayList<>(notes);
+		int[] ret = new int[arr.size()];
+		for(int i = 0; i<ret.length; i++){
+			ret[i] = arr.get(i);
+		}
+		return ret;
+    }
     public void computeNeighbors(Cell[][] c){
     	//block
     	int r0 = (row/3)*3;
@@ -68,7 +76,7 @@ public class Cell{
     	}
     }
 	public void prettyPrintNotes(){
-		int spaces = 8;
+		int spaces = 6;
     	Iterator<Integer> nit = notes.iterator();
 		while(nit.hasNext()) {
 			Integer itgr = nit.next();
@@ -79,7 +87,7 @@ public class Cell{
 		prettyVertical(col);
     }
     public void prettyPrintValue(){
-    	System.out.format("   %1d   ",value);
+    	System.out.format("  %1d  ",value);
     	prettyVertical(col);
     }
     public void prettyVertical(int col) {

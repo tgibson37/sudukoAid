@@ -13,7 +13,7 @@ import java.nio.file.Paths;
  */
 public class Aid{
 	static String currentPath;
-    static Cell[][] c;
+    static Cell[][] puzl;
     static byte[] bytes;
 	public static final int ROW = 1;
 	public static final int COL = 2;
@@ -46,9 +46,13 @@ public class Aid{
 //dumpAll();
 //dump(0,0);dump(4,1);
 		prettyPrint();
-		Container con = new Container(3,4,BLK);
-		System.out.println(con.uniques());
-		System.out.println(con.matchedPair());
+//assumes s4.sdk
+//		Container con = new Container(0,8,COL);
+		Container con = new Container(7,0,ROW);
+		System.out.println(con.identity());
+		con.cycleTest();
+//		System.out.println("~50 uniques: "+con.uniques());
+//		System.out.println("~51 matchedPair: "+con.matchedPair());
     }
     static void readInitFile(String filename) throws IOException {
     	try{
@@ -61,22 +65,22 @@ public class Aid{
         }
 	}
 	static void createCells(){
-    	c = new Cell[9][9];
+    	puzl = new Cell[9][9];
 		for(int row=0; row<9; ++row)
 			for(int col=0; col<9; ++col)
-				c[row][col] = new Cell(row,col);
+				puzl[row][col] = new Cell(row,col);
 	}
 	static void processValues(){
 		for(int i=0; i<90; ++i) {
 			if(bytes[i]==10)continue;   // skip newlines
 			if(bytes[i]==32)continue;   // skip spaces
-			c[i/10][i%10].setValue(bytes[i]-48);
+			puzl[i/10][i%10].setValue(bytes[i]-48);
 		}
 	}
 	static void computeNeighbors(){
 		for(int i=0; i<9; ++i)
 			for(int j=0; j<9; ++j)
-				c[i][j].computeNeighbors(c);
+				puzl[i][j].computeNeighbors(puzl);
 	}
 	static void dumpAll(){
 		for(int row=0; row<9; ++row){
@@ -87,14 +91,14 @@ public class Aid{
 		}
 	}
 	static void dump(int row, int col){
-		System.err.print(c[row][col]);
+		System.err.print(puzl[row][col]);
 		System.err.print("  ");
 	}
 		
 	static void showAll(){
 		for(int row=0; row<9; ++row){
 			for(int col=0; col<9; ++col){
-				System.out.print(c[row][col].value);
+				System.out.print(puzl[row][col].value);
 				System.out.print(" ");
 			}
 			System.out.println("");
@@ -103,27 +107,28 @@ public class Aid{
 	static void computeNotes(){
 		for(int row=0; row<9; ++row){
 			for(int col=0; col<9; ++col){
-				c[row][col].computeNotes(c);
+				puzl[row][col].computeNotes(puzl);
 			}
 		}
 	}
 	static void prettyPrint(){
 		System.out.println(
-"=========================================================================");		for(int row=0; row<9; ++row){
+"=======================================================");
+		for(int row=0; row<9; ++row){
 			System.out.format("#");
 			for(int col=0; col<9; ++col){
-				c[row][col].prettyPrintNotes();
+				puzl[row][col].prettyPrintNotes();
 			}
 			System.out.println("");
 			System.out.format("#");
 			for(int col=0; col<9; ++col){
-				c[row][col].prettyPrintValue();
+				puzl[row][col].prettyPrintValue();
 			}
 			System.out.println("");
 			if(row%3 != 2)System.out.println(
-"#------------------------------------------------------------------------");
+"#------------------------------------------------------");
 			else System.out.println(
-"#========================================================================");
+"#======================================================");
 		}
 	}
 }
