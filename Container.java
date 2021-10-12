@@ -43,6 +43,19 @@ public class Container{
 		}
 	}
 	public String identity(){return id;}
+	public Container serial(int num)
+	{  //rows, then cols, then blocks
+		int type = num/9+1;
+		int particular = num%9;
+		int p1=particular/3;
+		int p2=particular%3;
+		switch(type){
+			case 1: return new Container(particular,0,ROW);
+			case 2: return new Container(0,particular,COL);
+			case 3: return new Container (p1,p2,BLK);
+		}
+		return null;
+	}
 	public void dump(){
 		System.err.print("\n"+row+""+col);
 		if(type==ROW)System.err.print("ROW: ");
@@ -70,10 +83,9 @@ public class Container{
 	public HashSet<Cell> cycleTest(){
 		HashSet<Cell> candidates = pairs();
 		int num = candidates.size();
-System.out.println("candidates: "+num);
+System.out.println("candidates: ("+num+"): "+candidates);
 		if(num<3)return null;
-		Graph g1 = new Graph(9);
-//		Integer can[] = new Integer[num];
+		Cycle g1 = new Cycle(9);
 		for( Cell can : candidates ){
 			int fromto[] = can.notes();
 			g1.addEdge(fromto[0],fromto[1]);

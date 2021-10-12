@@ -18,6 +18,7 @@ public class Cell{
     		+"("+notes.toString()+")"
     		+"="+Integer.toString(value);
     }
+    // getter as int array
     public int[] notes(){
     	List<Integer> arr = new ArrayList<>(notes);
 		int[] ret = new int[arr.size()];
