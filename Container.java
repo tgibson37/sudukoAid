@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 /**
  *	Container.java -- looks for patterns in one container
  */
-public class Container{
+class Container{
 	public static final int ROW = 1;
 	public static final int COL = 2;
 	public static final int BLK = 3;
@@ -43,6 +43,10 @@ public class Container{
 		}
 	}
 	public String identity(){return id;}
+/**	@param num Containers are numbered 0..26. Hence for(i=0..26)serial(num)
+ *	visits every Container, all lines, then all rows, then all blocks.
+ *	@return Container number num.
+ */
 	public Container serial(int num)
 	{  //rows, then cols, then blocks
 		int type = num/9+1;
@@ -68,6 +72,10 @@ public class Container{
 		}
 		System.err.println();
 	}
+	
+// patterns follow: unique, pairs, matched pair, cycle
+// Each examines the container and returns a Set<Cell> that are that pattern.
+// Test the sets size()>0 for match, else ==0 for no match.
 	public Set<Cell> uniques(){
 		HashSet<Cell> uu = new HashSet<Cell>(); 
 		for(int i=0; i<9; ++i){
@@ -77,25 +85,8 @@ public class Container{
 		}
 		return uu;
 	}
-/*	From cells with notes size ==2, return a subset 
- *	that form a cycle, or null for no cycle.
- */
-	public HashSet<Cell> cycleTest(){
-		HashSet<Cell> candidates = pairs();
-		int num = candidates.size();
-System.out.println("candidates: ("+num+"): "+candidates);
-		if(num<3)return null;
-		Cycle g1 = new Cycle(9);
-		for( Cell can : candidates ){
-			int fromto[] = can.notes();
-			g1.addEdge(fromto[0],fromto[1]);
-        }
-        g1.isCyclic();
-    	return null;   // TEMPORARY
-    
-    }
-	public HashSet<Cell> pairs() {
-		HashSet<Cell> pp = new HashSet<Cell>();
+    public List<Cell> pairs() {
+		ArrayList<Cell> pp = new ArrayList<Cell>();
 		for( int i=0; i<9; ++i) {
 			if(cells[i].notes.size()==2) { 
 				pp.add(cells[i]);
@@ -119,4 +110,68 @@ System.out.println("candidates: ("+num+"): "+candidates);
 		}
 		return uu;
 	}
+
+/*	From cells with notes size ==2, return a subset 
+ *	that form a cycle, or null for no cycle.
+ */
+
+/*	public HashSet<Cell> cycleTest(){
+		List<Cell> candidates = pairs();
+		int num = candidates.size();
+		Cell[] cans = new Cell[num];   // new array, not a new Cell
+System.out.println("candidates: ("+num+"): "+candidates);
+		if(num<3)return null;
+		Cycle g1 = new Cycle(9);
+		int c=0;
+		for( Cell can : candidates ){
+			int fromto[] = can.notes();
+			int from = fromto[0]-1; // -1: note to cell subscript
+			int to   = fromto[1]-1;
+
+// BUT THAT'S NONESENSE...
+// A NOTE is a value not used yet, it is not a cell subscript.
+// Need a cell subscript. can is the cell itself. cells don't have		
+//	subscripts. Probably I need the cell, can. What happens later...
+//		THE EDGE  is a pair of values taken from can.notes.
+//	I need can0->can2->can3-->can0. But it can be a set.
+//  cans is a Cell[], and the subscript needed is into this array.		
+//		
+//	MatchedPair does all logic at the cell level. Matching is done
+//	Cell to Cell by digging into their notes. Cycle works only on
+//	added edges. Can cycle be modified to work directly with cells?
+//	Or, like sort() pass an Cell implements ObjWithNotes, w/ getNotes().
+//	Maybe a map? 
+//		
+
+			g1.addEdge(fromto[0]-1,fromto[1]-1);
+System.out.println("edge: " + (fromto[0]-1) +" "+ (fromto[1]-1) );
+			cans[c++] = can;
+        }
+        if( g1.isCyclic() ){
+        	Integer[] cycle = g1.getCycle();
+        	int clen = cycle.length;
+System.out.print("cycle: ");
+for(int i=0; i<clen; ++i)System.out.print(", "+cycle[i]);
+System.out.println("");
+// NEED: 4 Cells from candidate. can't use subscripts into HashSet.
+// need array of candidate pairs.
+
+
+
+
+        	int cycint[] = new int[clen];
+        	for(int i=0; i<clen; ++i) cycint[i] = cycle[i].intValue();
+			ArrayList cy = new ArrayList(9);
+			for(int i=0; i<clen; ++i) {
+				cy.add(cans[cycint[i]]);
+			}
+System.out.println("");
+        }
+        else{
+System.out.println("con~97, no cycle");
+			return null;
+        }
+    	return null;  // makes the compiler happy.
+    }
+*/
 }

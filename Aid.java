@@ -24,36 +24,14 @@ public class Aid{
 "Usage: java Aid <inputfile> [<optionaloutputfile>]\njust the name, not the sdk type."
     	);
     }
-    public static void main(String[] args) throws IOException{
-    	String filename="";
-		if(args.length>1){
-			PrintStream o = new PrintStream(new File(args[1]));
-			System.setOut(o);
-		}
-    	if(args.length>0){
-    		filename=args[0];
-    	}
-    	else{
-    		Usage();
-    		System.exit(0);
-    	}
-        createCells();
-		readInitFile(filename);
-		processValues();
-		showAll();
-		computeNeighbors();
-		computeNotes();
-//dumpAll();
-//dump(0,0);dump(4,1);
-		prettyPrint();
-//assumes s4.sdk
-//		Container con = new Container(0,8,COL);
-		Container con = new Container(7,0,ROW);
-		System.out.println(con.identity());
-		con.cycleTest();
-//		System.out.println("~50 uniques: "+con.uniques());
-//		System.out.println("~51 matchedPair: "+con.matchedPair());
-    }
+
+// mainline...
+	static void createCells(){
+    	puzl = new Cell[9][9];
+		for(int row=0; row<9; ++row)
+			for(int col=0; col<9; ++col)
+				puzl[row][col] = new Cell(row,col);
+	}
     static void readInitFile(String filename) throws IOException {
     	try{
 			currentPath = System.getProperty("user.dir");
@@ -64,12 +42,6 @@ public class Aid{
         	System.exit(1);
         }
 	}
-	static void createCells(){
-    	puzl = new Cell[9][9];
-		for(int row=0; row<9; ++row)
-			for(int col=0; col<9; ++col)
-				puzl[row][col] = new Cell(row,col);
-	}
 	static void processValues(){
 		for(int i=0; i<90; ++i) {
 			if(bytes[i]==10)continue;   // skip newlines
@@ -77,24 +49,6 @@ public class Aid{
 			puzl[i/10][i%10].setValue(bytes[i]-48);
 		}
 	}
-	static void computeNeighbors(){
-		for(int i=0; i<9; ++i)
-			for(int j=0; j<9; ++j)
-				puzl[i][j].computeNeighbors(puzl);
-	}
-	static void dumpAll(){
-		for(int row=0; row<9; ++row){
-			for(int col=0; col<9; ++col){
-				dump(row,col);
-			}
-			System.err.println("");
-		}
-	}
-	static void dump(int row, int col){
-		System.err.print(puzl[row][col]);
-		System.err.print("  ");
-	}
-		
 	static void showAll(){
 		for(int row=0; row<9; ++row){
 			for(int col=0; col<9; ++col){
@@ -103,6 +57,11 @@ public class Aid{
 			}
 			System.out.println("");
 		}
+	}
+	static void computeNeighbors(){
+		for(int i=0; i<9; ++i)
+			for(int j=0; j<9; ++j)
+				puzl[i][j].computeNeighbors(puzl);
 	}
 	static void computeNotes(){
 		for(int row=0; row<9; ++row){
@@ -131,4 +90,51 @@ public class Aid{
 "#======================================================");
 		}
 	}
+
+// dumps and main...
+	static void dumpAll(){
+		for(int row=0; row<9; ++row){
+			for(int col=0; col<9; ++col){
+				dump(row,col);
+			}
+			System.err.println("");
+		}
+	}
+	static void dump(int row, int col){
+		System.err.print(puzl[row][col]);
+		System.err.print("  ");
+	}
+
+/*	MAIN...
+ */
+public static void main(String[] args) throws IOException{
+		String filename="";
+		if(args.length>1){
+			PrintStream o = new PrintStream(new File(args[1]));
+			System.setOut(o);
+		}
+    	if(args.length>0){
+    		filename=args[0];
+    	}
+    	else{
+    		Usage();
+    		System.exit(0);
+    	}
+        createCells();
+		readInitFile(filename);
+		processValues();
+//		showAll();
+		computeNeighbors();
+		computeNotes();
+//dumpAll();
+//dump(0,0);dump(4,1);
+		prettyPrint();
+//Container con = new Container(0,8,COL);
+//assumes s4.sdk, has 4 cycle...
+Container con = new Container(7,7,BLK);         // <<=== CONTAINER
+		System.out.println(con.identity());
+//		con.cycleTest();     <<== BAD
+//		System.out.println("~50 uniques: "+con.uniques());
+//		System.out.println("~51 matchedPair: "+con.matchedPair());
+    }
 }
