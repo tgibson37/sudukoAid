@@ -75,7 +75,11 @@ public class Cell{
 				notes.remove(new Integer(cell.value));
 			}
     	}
+    	else notes = new TreeSet<Integer>();   // empty list
     }
+//	public void eraseNotes(){
+//		TreeSet<Integer> notes = new TreeSet<Integer>();
+//	}
 	public void prettyPrintNotes(){
 		int spaces = 6;
     	Iterator<Integer> nit = notes.iterator();

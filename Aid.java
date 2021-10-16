@@ -20,9 +20,13 @@ public class Aid{
 	public static final int BLK = 3;
 
     public static void Usage(){
-    	System.out.println(
-"Usage: java Aid <inputfile> [<optionaloutputfile>]\njust the name, not the sdk type."
-    	);
+    	System.out.println("Usage: java Aid <inputfile> [<optionaloutputfile>]");
+    	System.out.println("Just the input file's name, not the sdk type.");
+    	System.out.println("Commands:   (the prompt is >> )");    	
+    	System.out.println("	q -- quit");
+    	System.out.println("	sRCV (3 digits: row, column, value)");
+    	System.out.println("	Example: s472 sets cell at row 4, column 7 to value 2");
+    	System.out.println("");
     }
 
 // mainline...
@@ -90,7 +94,42 @@ public class Aid{
 "#======================================================");
 		}
 	}
+	private static void cmdSet(int[] x){
+		int row = x[1];
+		int col = x[2];
+		int value = x[3];
+		System.out.println("row "+row+", col "+col+" = "+value);
+		puzl[row-1][col-1].setValue(value);
+		computeNotes();
+		prettyPrint();
+	} 
 
+	private static void cmdDump(int[] x){
+	} 
+
+	private static void dialog(){
+		String cmd="";
+		int[] x = new int[9];
+        BufferedReader reader =
+            new BufferedReader(new InputStreamReader(System.in));
+		while(x[0] != 'q'){
+			System.out.print(">> ");
+			try{
+				cmd = reader.readLine();
+			}catch(Exception e){
+				System.err.println(e.toString());
+				System.exit(1);
+			}
+			for(int i=0;i<cmd.length();++i) 
+				x[i]=cmd.charAt(i)-48; // ascii digit to int
+			switch(cmd.charAt(0)){
+				case 'q': System.exit(0);
+				case 's': cmdSet(x); break;
+				case 'd': cmdDump(x); break;
+				default: continue;
+			}
+		}
+	}
 // dumps and main...
 	static void dumpAll(){
 		for(int row=0; row<9; ++row){
@@ -129,10 +168,11 @@ public static void main(String[] args) throws IOException{
 //dumpAll();
 //dump(0,0);dump(4,1);
 		prettyPrint();
+		dialog();
 //Container con = new Container(0,8,COL);
 //assumes s4.sdk, has 4 cycle...
-Container con = new Container(7,7,BLK);         // <<=== CONTAINER
-		System.out.println(con.identity());
+//Container con = new Container(7,7,BLK);         // <<=== CONTAINER
+//		System.out.println(con.identity());
 //		con.cycleTest();     <<== BAD
 //		System.out.println("~50 uniques: "+con.uniques());
 //		System.out.println("~51 matchedPair: "+con.matchedPair());
