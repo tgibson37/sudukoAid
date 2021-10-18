@@ -80,6 +80,13 @@ public class Aid{
 			}
 		}
 	}
+	static void hints(){    // implied -A, dash option later
+		System.out.println("All hints:");
+		for(int i = 0; i<27; ++i){
+			Container con = Container.serial(i);
+			con.hints();
+		}
+	}
 	static void prettyPrint(){	//I   render()
 		System.out.println(
 "=======================================================");
@@ -189,12 +196,13 @@ public class Aid{
 		computeNotes();
 //dumpAll();
 //dump(0,0);dump(4,1);
+		hints();
 		prettyPrint();
 		dialog();
 //Container con = new Container(0,8,COL);
 //assumes s4.sdk, has 4 cycle...
 //Container con = new Container(7,7,BLK);         // <<=== CONTAINER
-//		System.out.println(con.identity());
+//		System.out.println(con.toString());
 //		con.cycleTest();     <<== BAD
 //		System.out.println("~50 uniques: "+con.uniques());
 //		System.out.println("~51 matchedPair: "+con.matchedPair());

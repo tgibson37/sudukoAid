@@ -6,7 +6,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- *	Container.java -- looks for patterns in one container
+ *	Container.java -- looks for patterns in one container. Container objects
+ *	are transient, used analytically. They are not part of the game structure
+ *	which is just Aid.puzl array, and the 81 Cells.
+ *	
  */
 class Container{
 	public static final int ROW = 1;
@@ -42,21 +45,22 @@ class Container{
 			System.exit(1);
 		}
 	}
-	public String identity(){return id;}
-/**	@param num Containers are numbered 0..26. Hence for(i=0..26)serial(num)
- *	visits every Container, all lines, then all rows, then all blocks.
+	public String toString(){return id;}
+	
+/**	@param num Containers are numbered 0..26, all lines, then all rows, then all
+ *	blocks.
  *	@return Container number num.
  */
-	public Container serial(int num)
+	public static Container serial(int num)
 	{  //rows, then cols, then blocks
 		int type = num/9+1;
 		int particular = num%9;
-		int p1=particular/3;
-		int p2=particular%3;
+		int p1 = particular/3;
+		int p2 = particular%3;
 		switch(type){
-			case 1: return new Container(particular,0,ROW);
-			case 2: return new Container(0,particular,COL);
-			case 3: return new Container (p1,p2,BLK);
+			case ROW: return new Container(particular,0,ROW);
+			case COL: return new Container(0,particular,COL);
+			case BLK: return new Container (p1,p2,BLK);
 		}
 		return null;
 	}
@@ -76,6 +80,9 @@ class Container{
 // patterns follow: unique, pairs, matched pair, cycle
 // Each examines the container and returns a Set<Cell> that are that pattern.
 // Test the sets size()>0 for match, else ==0 for no match.
+
+
+//MOVE TO NEW CLASS: HINTS, each below is a subclass
 	public Set<Cell> uniques(){
 		HashSet<Cell> uu = new HashSet<Cell>(); 
 		for(int i=0; i<9; ++i){
@@ -104,12 +111,26 @@ class Container{
 					if( inotes.equals(jnotes) ){
 						uu.add(cells[i]);
 						uu.add(cells[j]);
+						return uu;
 					}
 				}
 			}
 		}
 		return uu;
 	}
+	public void hints(){
+		Set<Cell> mp = matchedPair();
+		if( mp.size()>1 ){
+			Iterator it = mp.iterator();
+			Cell c1 = (Cell)it.next();
+			Cell c2 = (Cell)it.next();
+			String pair = c1.rowColPretty()+" & "+c2.rowColPretty();
+			System.out.println("Matched pair:"+pair);
+		}
+	}
+
+
+
 
 /*	From cells with notes size ==2, return a subset 
  *	that form a cycle, or null for no cycle.

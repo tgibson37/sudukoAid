@@ -23,7 +23,8 @@ public class Cell{
     		+"("+notes.toString()+")"
     		+"="+Integer.toString(value);
     }
-    // getter as int array
+    public String rowColPretty(){	return " "+(row+1)+" "+(col+1); }
+// getter as int array
     public int[] notes(){
     	List<Integer> arr = new ArrayList<>(notes);
 		int[] ret = new int[arr.size()];
