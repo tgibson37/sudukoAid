@@ -18,10 +18,13 @@ public class Aid{
 	public static final int ROW = 1;
 	public static final int COL = 2;
 	public static final int BLK = 3;
+	private static final Boolean optv = false;
 
     public static void Usage(){
-    	System.out.println("Usage: java Aid <inputfile> [<optionaloutputfile>]");
+    	System.out.println("Usage: java Aid [options] <inputfile> [<optionaloutputfile>]");
     	System.out.println("Just the input file's name, not the sdk type.");
+    	System.out.println("Options:");
+    	System.out.println("\t-v -- verbose");
     	System.out.println("Commands:   (the prompt is >> )");    	
     	System.out.println("	q -- quit");
     	System.out.println("	sRCV (3 digits: row, column, value)");
@@ -50,7 +53,10 @@ public class Aid{
 		for(int i=0; i<90; ++i) {
 			if(bytes[i]==10)continue;   // skip newlines
 			if(bytes[i]==32)continue;   // skip spaces
-			puzl[i/10][i%10].setValue(bytes[i]-48);
+			int row = i/10;
+			int col = i%10;
+			puzl[row][col].setValue(bytes[i]-48);
+			puzl[row][col].setOriginal();
 		}
 	}
 	static void showAll(){
@@ -74,7 +80,7 @@ public class Aid{
 			}
 		}
 	}
-	static void prettyPrint(){
+	static void prettyPrint(){	//I   render()
 		System.out.println(
 "=======================================================");
 		for(int row=0; row<9; ++row){
@@ -94,14 +100,25 @@ public class Aid{
 "#======================================================");
 		}
 	}
-	private static void cmdSet(int[] x){
+	private static Cell getCellX(int[] x){
 		int row = x[1];
 		int col = x[2];
+		if(row<1 || row>9 || col<1 || col>9) {
+			System.err.println("Bad command");return null;
+		}
+		return puzl[row-1][col-1];
+	}
+	private static void cmdSet(int[] x){
 		int value = x[3];
-		System.out.println("row "+row+", col "+col+" = "+value);
-		puzl[row-1][col-1].setValue(value);
-		computeNotes();
-		prettyPrint();
+		Cell c = getCellX(x);
+		if(c==null)return;
+		if(optv)System.out.println(c.toString()+" set to "+value);	//I msg
+		if(value<0 || value>9)System.out.println("bad value");  //I	msg
+		else {
+			c.setValue(value);
+			computeNotes();
+			prettyPrint();
+		}
 	} 
 
 	private static void cmdDump(int[] x){
@@ -142,12 +159,17 @@ public class Aid{
 	static void dump(int row, int col){
 		System.err.print(puzl[row][col]);
 		System.err.print("  ");
+		System.err.println("");
 	}
 
 /*	MAIN...
  */
-public static void main(String[] args) throws IOException{
-		String filename="";
+	public static void main(String[] mingled) throws IOException{
+		String filename=null;
+		Arguments arguments = new Arguments(mingled); 
+		String[] args = arguments.getArgs();
+		String[] opts = arguments.getOpts();
+
 		if(args.length>1){
 			PrintStream o = new PrintStream(new File(args[1]));
 			System.setOut(o);
@@ -177,4 +199,5 @@ public static void main(String[] args) throws IOException{
 //		System.out.println("~50 uniques: "+con.uniques());
 //		System.out.println("~51 matchedPair: "+con.matchedPair());
     }
+
 }

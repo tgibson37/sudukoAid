@@ -7,10 +7,15 @@ public class Cell{
     int value;
     ArrayList<Cell> neighbor = new ArrayList<Cell>();
     TreeSet<Integer> notes = new TreeSet<Integer>();
-    int n;
+    Boolean orig = false;
     
-    public Cell(int r, int c){row=r;col=c;}
-    public void setValue(int v){value=v;}
+    public Cell(int r, int c){
+    	row=r;col=c;
+    }
+    public void setValue(int v){
+    	if(!orig)value=v;
+    	else System.out.println("cell value is orig");	//I msg
+    }
     public int getValue(){return value;}
     public String toString(){
     	return Integer.toString(row)
@@ -76,6 +81,9 @@ public class Cell{
 			}
     	}
     	else notes = new TreeSet<Integer>();   // empty list
+    }
+    public void setOriginal(){
+    	orig=true;
     }
 //	public void eraseNotes(){
 //		TreeSet<Integer> notes = new TreeSet<Integer>();
