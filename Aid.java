@@ -59,7 +59,7 @@ public class Aid{
 			if(bytes[i]==32)continue;   // skip spaces
 			int row = i/10;
 			int col = i%10;
-			puzl[row][col].setValue(bytes[i]-48);
+			puzl[row][col].initValue(bytes[i]-48);
 			puzl[row][col].setOriginal();
 		}
 	}
@@ -87,11 +87,6 @@ public class Aid{
 	static void hints(){
 		if(optu){ 
 			hintu();
-/*			for(int i = 0; i<81; ++i){
-				Cell cell = Cell.serial(i);
-				cell.hintu();
-			}
-*/
 		}
 		if(optm){ 
 			for(int i = 0; i<27; ++i){

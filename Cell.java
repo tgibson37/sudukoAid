@@ -12,11 +12,31 @@ public class Cell{
     public Cell(int r, int c){
     	row=r;col=c;
     }
-    public void setValue(int v){
-    	if(!orig)value=v;
-    	else System.out.println("cell value is orig");	//I msg
+// initialization
+    public void initValue(int v){
+    	value=v;
+    	orig=true;
     }
+// set command
+    public void setValue(int v){
+    	if(!orig){
+			int[] n = notes();
+			for(int i=0; i<n.length; ++i){
+				if(v==n[i]){
+					value=v;
+					return;
+				}
+			}
+			System.out.println("Value conflict");	//I msg
+		}
+    	else System.out.println("Cell value is orig");	//I msg
+    }
+    // tests: use s1, s177 conflict, s133 orig, s183 OK
+    
     public int getValue(){return value;}
+/**	
+ *	@return String formatted to show place, value, and notes
+ */
     public String toString(){
     	return Integer.toString(row)
     		+","+Integer.toString(col)
@@ -24,15 +44,18 @@ public class Cell{
     		+"="+Integer.toString(value);
     }
     public String rowColPretty(){	return " "+(row+1)+" "+(col+1); }
-// getter as int array
+/**	
+ *	@return notes as int array
+ */
     public int[] notes(){
     	List<Integer> arr = new ArrayList<>(notes);
-		int[] ret = new int[arr.size()];
-		for(int i = 0; i<ret.length; i++){
-			ret[i] = arr.get(i);
+		int[] nts = new int[arr.size()];
+		for(int i = 0; i<nts.length; i++){
+			nts[i] = arr.get(i);
 		}
-		return ret;
+		return nts;
     }
+// initializers, used my Aid's mainline after puzl[][] is defined
     public void computeNeighbors(Cell[][] c){
     	//block
     	int r0 = (row/3)*3;
@@ -54,6 +77,40 @@ public class Cell{
     		neighbor.add(c[i][col]);
     	}
 	}
+// used by Aid after reading input file
+    public void setOriginal(){
+    	orig=true;
+    }
+// used by Aid's init, and by main play loop after each move
+    public void computeNotes(Cell[][] c){
+    	if(value==0){
+			for(int i=1; i<10; ++i)notes.add(new Integer(i));
+			for(Cell cell : neighbor){
+				notes.remove(new Integer(cell.value));
+			}
+    	}
+    	else notes = new TreeSet<Integer>();   // empty list
+    }
+	public void prettyPrintNotes(){
+		int spaces = 6;
+    	Iterator<Integer> nit = notes.iterator();
+		while(nit.hasNext()) {
+			Integer itgr = nit.next();
+			System.out.format("%1d",itgr);
+			--spaces;
+		}
+		while(spaces-- > 1)System.out.format(" ");
+		prettyVertical(col);
+    }
+    public void prettyPrintValue(){
+    	System.out.format("  %1d  ",value);
+    	prettyVertical(col);
+    }
+    public void prettyVertical(int col) {
+    	if(col%3 != 2 ) System.out.format("|");
+    	else System.out.format("#");
+    }
+// debug tools
 	public void dump(){
 		System.err.print("C"+row+col);
 		if(value==0)System.err.print(notes);
@@ -74,38 +131,4 @@ public class Cell{
 		}
 		System.err.print("\n");
 	}
-    public void computeNotes(Cell[][] c){
-    	if(value==0){
-			for(int i=1; i<10; ++i)notes.add(new Integer(i));
-			for(Cell cell : neighbor){
-				notes.remove(new Integer(cell.value));
-			}
-    	}
-    	else notes = new TreeSet<Integer>();   // empty list
-    }
-    public void setOriginal(){
-    	orig=true;
-    }
-//	public void eraseNotes(){
-//		TreeSet<Integer> notes = new TreeSet<Integer>();
-//	}
-	public void prettyPrintNotes(){
-		int spaces = 6;
-    	Iterator<Integer> nit = notes.iterator();
-		while(nit.hasNext()) {
-			Integer itgr = nit.next();
-			System.out.format("%1d",itgr);
-			--spaces;
-		}
-		while(spaces-- > 1)System.out.format(" ");
-		prettyVertical(col);
-    }
-    public void prettyPrintValue(){
-    	System.out.format("  %1d  ",value);
-    	prettyVertical(col);
-    }
-    public void prettyVertical(int col) {
-    	if(col%3 != 2 ) System.out.format("|");
-    	else System.out.format("#");
-    }
 }
