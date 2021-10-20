@@ -18,7 +18,11 @@ public class Aid{
 	public static final int ROW = 1;
 	public static final int COL = 2;
 	public static final int BLK = 3;
-	private static final Boolean optv = false;
+	private static Boolean opti = false;  // show inputs
+	private static Boolean optv = false;  // verbose
+	private static Boolean optu = false;  // hints, unique
+	private static Boolean optm = false;  // hints, matched pair
+	private static Boolean optp = false;  // hints, pairs
 
     public static void Usage(){
     	System.out.println("Usage: java Aid [options] <inputfile> [<optionaloutputfile>]");
@@ -80,13 +84,43 @@ public class Aid{
 			}
 		}
 	}
-	static void hints(){    // implied -A, dash option later
-		System.out.println("All hints:");
-		for(int i = 0; i<27; ++i){
-			Container con = Container.serial(i);
-			con.hints();
+	static void hints(){
+		if(optu){ 
+			hintu();
+/*			for(int i = 0; i<81; ++i){
+				Cell cell = Cell.serial(i);
+				cell.hintu();
+			}
+*/
+		}
+		if(optm){ 
+			for(int i = 0; i<27; ++i){
+				Container con = Container.serial(i);
+				con.hintm();
+			}
 		}
 	}
+	public static Set<Cell> uniques(){
+		HashSet<Cell> uu = new HashSet<Cell>();
+		for(int i=0; i<9; ++i){
+			for(int j=0; j<9; ++j){
+				if(puzl[i][j].notes.size()==1){
+					uu.add(puzl[i][j]);
+				}
+			}
+		}
+		return uu;
+	}
+	private static void hintu(){
+		Set<Cell> uq = uniques();
+		Iterator it = uq.iterator();
+		while(it.hasNext()){
+			Cell c1 = (Cell)it.next();
+			String cell = c1.rowColPretty();
+			System.out.println("Unique:"+cell);
+		}
+	}
+
 	static void prettyPrint(){	//I   render()
 		System.out.println(
 "=======================================================");
@@ -124,6 +158,7 @@ public class Aid{
 		else {
 			c.setValue(value);
 			computeNotes();
+			hints();
 			prettyPrint();
 		}
 	} 
@@ -188,17 +223,33 @@ public class Aid{
     		Usage();
     		System.exit(0);
     	}
+    for(int i=0; i<opts.length; ++i) {
+    	String opt = opts[i];
+    	for(int j=1; j<opt.length(); ++j) {
+    		char op = opt.charAt(j);
+    		switch(op){
+    		case 'i': opti = true; break;
+    		case 'u': optu = true; break;
+    		case 'm': optm = true; break;
+    		case 'p': optp = true; break;
+    		case 'A': optu = optm = optp = true; break;
+    		default: System.out.println("bad option "+op);
+    		}
+    	}
+    }
+// Process calls...
         createCells();
 		readInitFile(filename);
 		processValues();
-//		showAll();
+		if(opti)showAll();
 		computeNeighbors();
 		computeNotes();
 //dumpAll();
 //dump(0,0);dump(4,1);
 		hints();
 		prettyPrint();
-		dialog();
+		dialog();       // TEMP turnoff
+
 //Container con = new Container(0,8,COL);
 //assumes s4.sdk, has 4 cycle...
 //Container con = new Container(7,7,BLK);         // <<=== CONTAINER

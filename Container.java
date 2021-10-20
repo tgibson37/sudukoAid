@@ -83,15 +83,6 @@ class Container{
 
 
 //MOVE TO NEW CLASS: HINTS, each below is a subclass
-	public Set<Cell> uniques(){
-		HashSet<Cell> uu = new HashSet<Cell>(); 
-		for(int i=0; i<9; ++i){
-			if(cells[i].notes.size()==1){
-				uu.add(cells[i]);
-			}
-		}
-		return uu;
-	}
     public List<Cell> pairs() {
 		ArrayList<Cell> pp = new ArrayList<Cell>();
 		for( int i=0; i<9; ++i) {
@@ -118,7 +109,7 @@ class Container{
 		}
 		return uu;
 	}
-	public void hints(){
+	public void hintm(){
 		Set<Cell> mp = matchedPair();
 		if( mp.size()>1 ){
 			Iterator it = mp.iterator();
@@ -128,7 +119,6 @@ class Container{
 			System.out.println("Matched pair:"+pair);
 		}
 	}
-
 
 
 
