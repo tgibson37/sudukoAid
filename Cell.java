@@ -18,18 +18,18 @@ public class Cell{
     	orig=true;
     }
 // set command
-    public void setValue(int v){
+    public String setValue(int v){
     	if(!orig){
 			int[] n = notes();
 			for(int i=0; i<n.length; ++i){
 				if(v==n[i]){
 					value=v;
-					return;
+					return null;
 				}
 			}
-			System.out.println("Value conflict");	//I msg
+			return "Value conflict";
 		}
-    	else System.out.println("Cell value is orig");	//I msg
+    	return "Cell value is orig";
     }
     // tests: use s1, s177 conflict, s133 orig, s183 OK
     
@@ -91,24 +91,28 @@ public class Cell{
     	}
     	else notes = new TreeSet<Integer>();   // empty list
     }
-	public void prettyPrintNotes(){
-		int spaces = 6;
+	public String prettyPrintNotes(){
+		int spaces = 6;  // includes the trailing vertical
+		int i=0;
+		byte[] bytes = new byte[spaces];
     	Iterator<Integer> nit = notes.iterator();
 		while(nit.hasNext()) {
-			Integer itgr = nit.next();
-			System.out.format("%1d",itgr);
+			int aNote = nit.next()+48;
+			bytes[i++] = (byte)aNote; 
 			--spaces;
 		}
-		while(spaces-- > 1)System.out.format(" ");
-		prettyVertical(col);
+		while(spaces-- > 1)bytes[i++] = ' ';
+		bytes[i] = (byte)prettyVertical(col);
+		String s = new String(bytes);
+		return s;
     }
-    public void prettyPrintValue(){
-    	System.out.format("  %1d  ",value);
-    	prettyVertical(col);
+    public String prettyPrintValue(){
+    	char val = (char)(value+48);
+    	return "  " + val + "  " + prettyVertical(col);
     }
-    public void prettyVertical(int col) {
-    	if(col%3 != 2 ) System.out.format("|");
-    	else System.out.format("#");
+    public char prettyVertical(int col) {
+    	if(col%3 != 2 ) return '|';
+    	else return '#';
     }
 // debug tools
 	public void dump(){

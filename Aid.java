@@ -28,7 +28,10 @@ public class Aid{
     	System.out.println("Usage: java Aid [options] <inputfile> [<optionaloutputfile>]");
     	System.out.println("Just the input file's name, not the sdk type.");
     	System.out.println("Options:");
-    	System.out.println("\t-v -- verbose");
+    	System.out.println("\t-p -- show all pairs");
+    	System.out.println("\t-m -- show matched pair hints");
+    	System.out.println("\t-u -- show unique hints");
+    	System.out.println("\t-v -- verbose, mainly debug dumps");
     	System.out.println("Commands:   (the prompt is >> )");    	
     	System.out.println("	q -- quit");
     	System.out.println("	sRCV (3 digits: row, column, value)");
@@ -91,7 +94,8 @@ public class Aid{
 		if(optm){ 
 			for(int i = 0; i<27; ++i){
 				Container con = Container.serial(i);
-				con.hintm();
+				String hint = con.hintm();
+				if( hint!=null )System.out.println(hint);
 			}
 		}
 	}
@@ -122,12 +126,12 @@ public class Aid{
 		for(int row=0; row<9; ++row){
 			System.out.format("#");
 			for(int col=0; col<9; ++col){
-				puzl[row][col].prettyPrintNotes();
+				System.out.print(puzl[row][col].prettyPrintNotes());
 			}
 			System.out.println("");
 			System.out.format("#");
 			for(int col=0; col<9; ++col){
-				puzl[row][col].prettyPrintValue();
+				System.out.print(puzl[row][col].prettyPrintValue());
 			}
 			System.out.println("");
 			if(row%3 != 2)System.out.println(
@@ -199,10 +203,11 @@ public class Aid{
 		System.err.println("");
 	}
 
-/*	MAIN...
+/*	MAIN
  */
 	public static void main(String[] mingled) throws IOException{
 		String filename=null;
+// Arguments...
 		Arguments arguments = new Arguments(mingled); 
 		String[] args = arguments.getArgs();
 		String[] opts = arguments.getOpts();
@@ -232,26 +237,24 @@ public class Aid{
     		}
     	}
     }
-// Process calls...
+// Process...
+//System.err.println("~240");
         createCells();
+//System.err.println("~242");
 		readInitFile(filename);
+//System.err.println("~244");
 		processValues();
+//System.err.println("~246");
 		if(opti)showAll();
+//System.err.println("~248");
 		computeNeighbors();
+//System.err.println("~250");
 		computeNotes();
-//dumpAll();
-//dump(0,0);dump(4,1);
+//System.err.println("~252");
 		hints();
+//System.err.println("~254");
 		prettyPrint();
-		dialog();       // TEMP turnoff
-
-//Container con = new Container(0,8,COL);
-//assumes s4.sdk, has 4 cycle...
-//Container con = new Container(7,7,BLK);         // <<=== CONTAINER
-//		System.out.println(con.toString());
-//		con.cycleTest();     <<== BAD
-//		System.out.println("~50 uniques: "+con.uniques());
-//		System.out.println("~51 matchedPair: "+con.matchedPair());
+//System.err.println("~256");
+		dialog();
     }
-
 }

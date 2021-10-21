@@ -48,10 +48,12 @@ class Container{
 			System.exit(1);
 		}
 	}
-	public String toString(){return id;}
+	public String toString(){
+		return id;
+	}
 	
 /**	@param num Containers are conceptually numbered 0..26,
- *		all lines, then all rows, then all blocks
+ *		all lines, then all rows, then all blocks.
  *	@return specified Container.
  */
 	public static Container serial(int num)
@@ -67,24 +69,9 @@ class Container{
 		}
 		return null;
 	}
-// debug aid, more info than id, dumps all cells on one line.
-	public void dump(){
-		System.err.print("\n"+row+""+col);
-		if(type==ROW)System.err.print("ROW: ");
-		else if(type==COL)System.err.print("COL: ");
-		else if(type==BLK)System.err.print("BLK: ");
-		else System.err.print("???: ");
-		for(int i=0; i<9; ++i){
-			cells[i].dump();
-			if(i<8)System.err.print(",");
-		}
-		System.err.println();
-	}
-	
-// patterns follow: unique, pairs, matched pair, cycle
+// Hints follow: unique, pairs, matched pair, cycle.
 // Each examines the container and returns a Set<Cell> that are that pattern.
 // Test the sets size()>0 for match, else ==0 for no match.
-
 
 //MOVE TO NEW CLASS: HINTS, each below is a subclass
     public List<Cell> pairs() {
@@ -113,14 +100,29 @@ class Container{
 		}
 		return uu;
 	}
-	public void hintm(){
+	public String hintm(){
 		Set<Cell> mp = matchedPair();
 		if( mp.size()>1 ){
 			Iterator it = mp.iterator();
 			Cell c1 = (Cell)it.next();
 			Cell c2 = (Cell)it.next();
 			String pair = c1.rowColPretty()+" & "+c2.rowColPretty();
-			System.out.println("Matched pair:"+pair);
+			return pair;
 		}
+		else return null;
+	}
+
+// debug aid, more info than id, dumps all cells on one line.
+	public void dump(){
+		System.err.print("\n"+row+""+col);
+		if(type==ROW)System.err.print("ROW: ");
+		else if(type==COL)System.err.print("COL: ");
+		else if(type==BLK)System.err.print("BLK: ");
+		else System.err.print("???: ");
+		for(int i=0; i<9; ++i){
+			cells[i].dump();
+			if(i<8)System.err.print(",");
+		}
+		System.err.println();
 	}
 }
