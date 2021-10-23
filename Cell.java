@@ -94,7 +94,7 @@ public class Cell{
 	public String prettyPrintNotes(){
 		int spaces = 6;  // includes the trailing vertical
 		int i=0;
-		byte[] bytes = new byte[spaces];
+		byte[] bytes = new byte[9];
     	Iterator<Integer> nit = notes.iterator();
 		while(nit.hasNext()) {
 			int aNote = nit.next()+48;

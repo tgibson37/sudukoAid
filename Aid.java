@@ -28,10 +28,10 @@ public class Aid{
     	System.out.println("Usage: java Aid [options] <inputfile> [<optionaloutputfile>]");
     	System.out.println("Just the input file's name, not the sdk type.");
     	System.out.println("Options:");
-    	System.out.println("\t-p -- show all pairs");
+//    	System.out.println("\t-p -- show all pairs");
     	System.out.println("\t-m -- show matched pair hints");
     	System.out.println("\t-u -- show unique hints");
-    	System.out.println("\t-v -- verbose, mainly debug dumps");
+//    	System.out.println("\t-v -- verbose, mainly debug dumps");
     	System.out.println("Commands:   (the prompt is >> )");    	
     	System.out.println("	q -- quit");
     	System.out.println("	sRCV (3 digits: row, column, value)");
@@ -57,7 +57,7 @@ public class Aid{
         }
 	}
 	static void processValues(){
-		for(int i=0; i<90; ++i) {
+		for(int i=0; i<89; ++i) {
 			if(bytes[i]==10)continue;   // skip newlines
 			if(bytes[i]==32)continue;   // skip spaces
 			int row = i/10;
