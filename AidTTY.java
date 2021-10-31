@@ -19,12 +19,12 @@ class AidTTY implements AidPresentation{
 		for(int row=0; row<9; ++row){
 			System.out.format("#");
 			for(int col=0; col<9; ++col){
-				out(Aid.puzl[row][col].prettyPrintNotes());
+				out(Aid.puzl[row][col].notesAsString());
 			}
 			outln("");
 			System.out.format("#");
 			for(int col=0; col<9; ++col){
-				out(Aid.puzl[row][col].prettyPrintValue());
+				out(Aid.puzl[row][col].valueAsString());
 			}
 			outln("");
 			if(row%3 != 2)outln(

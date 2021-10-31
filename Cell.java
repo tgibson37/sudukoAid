@@ -12,12 +12,13 @@ public class Cell{
     public Cell(int r, int c){
     	row=r;col=c;
     }
-// initialization
+// initialization used using puzl inputs
     public void initValue(int v){
     	value=v;
     	orig=true;
     }
-// set command
+    public int getValue(){ return value; }
+// used by set command
     public String setValue(int v){
     	if(!orig){
 			int[] n = notes();
@@ -31,9 +32,8 @@ public class Cell{
 		}
     	return "Cell value is orig";
     }
-    // tests: use s1, s177 conflict, s133 orig, s183 OK
+//recommended tests: Use s1, s177 conflict, s133 orig, s183 OK
     
-    public int getValue(){return value;}
 /**	
  *	@return String formatted to show place, value, and notes
  */
@@ -96,11 +96,12 @@ System.out.println("Cell~61 notes: "+nts);
     	}
     	else notes = new TreeSet<Integer>();   // empty list
     }
-	public String prettyPrintNotes(){
+    public Iterator<Integer> getNotesIterator(){ return notes.iterator(); }
+	public String notesAsString(){
 		int spaces = 6;  // includes the trailing vertical
 		int i=0;
 		byte[] bytes = new byte[9];
-    	Iterator<Integer> nit = notes.iterator();
+    	Iterator<Integer> nit = getNotesIterator();
 		while(nit.hasNext()) {
 			int aNote = nit.next()+48;
 			bytes[i++] = (byte)aNote; 
@@ -111,8 +112,8 @@ System.out.println("Cell~61 notes: "+nts);
 		String s = new String(bytes);
 		return s;
     }
-    public String prettyPrintValue(){
-    	char val = (char)(value+48);
+    public String valueAsString(){
+    	char val = (char)(getValue()+48);
     	return "  " + val + "  " + prettyVertical(col);
     }
     public char prettyVertical(int col) {
