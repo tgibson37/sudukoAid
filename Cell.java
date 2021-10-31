@@ -32,7 +32,7 @@ public class Cell{
 		}
     	return "Cell value is orig";
     }
-//recommended tests: Use s1, s177 conflict, s133 orig, s183 OK
+//recommended tests: Use s1:s133 s177 conflict, s133 orig, s183 OK
     
 /**	
  *	@return String formatted to show place, value, and notes

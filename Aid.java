@@ -144,10 +144,15 @@ static AidPresentation presentation;   // probably temporary, move to TTY/Graphi
 		if(optv)outln(c.toString()+" set to "+value);	//I msg
 		if(value<0 || value>9)outln("bad value");  //I	msg
 		else {
-			c.setValue(value);
-			computeNotes();
-			hints();
-			presentation.displayBoard();
+			String bad = c.setValue(value);
+			if(bad!=null){
+				presentation.outln(bad);
+			}
+			else{
+				computeNotes();
+				hints();
+				presentation.displayBoard();
+			}
 		}
 	} 
 
