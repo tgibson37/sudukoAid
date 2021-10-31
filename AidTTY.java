@@ -1,3 +1,5 @@
+import java.io.*;
+
 class AidTTY implements AidPresentation{
 	static AidTTY me = new AidTTY();  // self instantiate
 	private AidTTY(){ super(); }          // enforce singleton
@@ -7,28 +9,75 @@ class AidTTY implements AidPresentation{
 	
 /**	interface implementation for TTY
 */
-	public String presStyle(){ return "tty style..."; }
+	public String presentationStyle(){ return "tty style..."; }
     public void out(String s){System.out.print(s);}
     public void outln(String s){System.out.println(s);}
-    public void displayBoard(){
-    	System.out.println("TTY displayAll");
-    	prettyPrint();
-    };
-	void prettyPrint(){	//I   render()
-		outln("=======================================================");
+    public void displayBoard(){ prettyPrint(); };   
+
+//   renders the board, tty style
+	void prettyPrint(){	             
+		System.out.println("=======================================================");
 		for(int row=0; row<9; ++row){
 			System.out.format("#");
 			for(int col=0; col<9; ++col){
-				out(Aid.puzl[row][col].notesAsString());
+				System.out.print(Aid.puzl[row][col].notesAsString());
 			}
-			outln("");
+			System.out.println("");
 			System.out.format("#");
 			for(int col=0; col<9; ++col){
-				out(Aid.puzl[row][col].valueAsString());
+				System.out.print(Aid.puzl[row][col].valueAsString());
 			}
-			outln("");
-			if(row%3 != 2)outln("#------------------------------------------------------");
-			else outln("#======================================================");
+			System.out.println("");
+			if(row%3 != 2)System.out.println("#------------------------------------------------------");
+			else System.out.println("#======================================================");
+		}
+	}
+	private void cmdSet(int[] x){
+		int value = x[3];
+		Cell c = Aid.getCellX(x);
+		if(c==null)return;
+		if(Aid.optv)System.out.println(c.toString()+" set to "+value);	//I msg
+		if(value<0 || value>9)System.out.println("bad value");  //I	msg
+		else {
+			String bad = c.setValue(value);
+			if(bad!=null){
+				System.out.println(bad);
+			}
+			else{
+				Aid.computeNotes();
+				Aid.hints();
+				displayBoard();
+			}
+		}
+	}
+	public void doThePuzzle(){
+		prettyPrint();
+		dialog();
+	}
+	private static void cmdDump(int[] x){
+	} 
+
+	private void dialog(){
+		String cmd="";
+		int[] x = new int[9];
+        BufferedReader reader =
+            new BufferedReader(new InputStreamReader(System.in));
+		while(x[0] != 'q'){
+			System.out.print(">> ");
+			try{
+				cmd = reader.readLine();
+			}catch(Exception e){
+				System.err.println(e.toString());
+				System.exit(1);
+			}
+			for(int i=0;i<cmd.length();++i) 
+				x[i]=cmd.charAt(i)-48; // ascii digit to int
+			switch(cmd.charAt(0)){
+				case 'q': System.exit(0);
+				case 's': cmdSet(x); break;
+				case 'd': cmdDump(x); break;
+				default: continue;
+			}
 		}
 	}
 }

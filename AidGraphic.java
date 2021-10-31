@@ -3,8 +3,7 @@ import java.io.IOException;
 import java.awt.*;
 import javax.swing.*;
 
-class AidGraphic extends JPanel
-        implements AidPresentation
+class AidGraphic extends JPanel implements AidPresentation
         //, ActionListener, MouseListener 
 {
 	static AidGraphic me = new AidGraphic();  // self instantiate
@@ -15,9 +14,12 @@ class AidGraphic extends JPanel
 	public void outln(String s){}
 	public void out(String s){}
 	public void displayBoard(){
-System.err.println("Graphic displayBoard");
+System.err.println("Graphic: in displayBoard, not done yet");
 	}
-	public String presStyle(){ return "graphic style"; }
+	public String presentationStyle(){ return "graphic style"; }
+	public void doThePuzzle(){
+System.err.println("Graphic: do the puzzle, not done yet");
+	}
 }
 
 class MyFrame extends JFrame{

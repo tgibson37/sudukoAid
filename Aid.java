@@ -9,7 +9,8 @@ interface AidPresentation{
 	void outln(String s);
 	void out(String s);
 	void displayBoard();
-	String presStyle();
+	String presentationStyle();
+	void doThePuzzle();
 }
 
 /**
@@ -26,7 +27,7 @@ static AidPresentation presentation;   // probably temporary, move to TTY/Graphi
 	public static final int COL = 2;
 	public static final int BLK = 3;
 	private static Boolean opti = false;  // show inputs
-	private static Boolean optv = false;  // verbose
+	public static Boolean optv = false;  // verbose
 	private static Boolean optu = false;  // hints, unique
 	private static Boolean optm = false;  // hints, matched pair
 	private static Boolean optp = false;  // hints, pairs
@@ -58,6 +59,14 @@ static AidPresentation presentation;   // probably temporary, move to TTY/Graphi
 		for(int row=0; row<9; ++row)
 			for(int col=0; col<9; ++col)
 				puzl[row][col] = new Cell(row,col);
+	}
+	public static Cell getCellX(int[] x){
+		int row = x[1];
+		int col = x[2];
+		if(row<1 || row>9 || col<1 || col>9) {
+			System.out.println("Bad command");return null;
+		}
+		return Aid.puzl[row-1][col-1];
 	}
     static void readInitFile(String filename) throws IOException {
     	try{
@@ -131,61 +140,6 @@ static AidPresentation presentation;   // probably temporary, move to TTY/Graphi
 			outln("Unique:"+cell);
 		}
 	}
-//tty stuff  VVVVV
-	private static Cell getCellX(int[] x){
-		int row = x[1];
-		int col = x[2];
-		if(row<1 || row>9 || col<1 || col>9) {
-			presentation.outln("Bad command");return null;
-		}
-		return puzl[row-1][col-1];
-	}
-	private static void cmdSet(int[] x){
-		int value = x[3];
-		Cell c = getCellX(x);
-		if(c==null)return;
-		if(optv)outln(c.toString()+" set to "+value);	//I msg
-		if(value<0 || value>9)outln("bad value");  //I	msg
-		else {
-			String bad = c.setValue(value);
-			if(bad!=null){
-				presentation.outln(bad);
-			}
-			else{
-				computeNotes();
-				hints();
-				presentation.displayBoard();
-			}
-		}
-	} 
-
-	private static void cmdDump(int[] x){
-	} 
-
-	private static void dialog(){
-		String cmd="";
-		int[] x = new int[9];
-        BufferedReader reader =
-            new BufferedReader(new InputStreamReader(System.in));
-		while(x[0] != 'q'){
-			out(">> ");
-			try{
-				cmd = reader.readLine();
-			}catch(Exception e){
-				System.err.println(e.toString());
-				System.exit(1);
-			}
-			for(int i=0;i<cmd.length();++i) 
-				x[i]=cmd.charAt(i)-48; // ascii digit to int
-			switch(cmd.charAt(0)){
-				case 'q': System.exit(0);
-				case 's': cmdSet(x); break;
-				case 'd': cmdDump(x); break;
-				default: continue;
-			}
-		}
-	}
-//tty stuff  ^^^^^
 
 // dumps and main...
 	static void dumpAll(){
@@ -228,7 +182,7 @@ static AidPresentation presentation;   // probably temporary, move to TTY/Graphi
 			if(opt.equals("-tty")){
 				presentation = AidTTY.instance();    // overide
 			}
-System.err.println("Aid~230: "+presentation.presStyle());
+//System.err.println("Aid~185: "+presentation.presentationStyle());
 //set all presentations here   ^^^^^^
 			for(int j=1; j<opt.length(); ++j) {
 				char op = opt.charAt(j);
@@ -245,23 +199,21 @@ System.err.println("Aid~230: "+presentation.presStyle());
 			}
 		}
 // Process...
-//System.err.println("~240");
+//System.err.println("~202");
         createCells();
-//System.err.println("~242");
+//System.err.println("~204");
 		readInitFile(filename);
-//System.err.println("~244");
+//System.err.println("~206");
 		processValues();
-//System.err.println("~246");
+//System.err.println("~208");
 		if(opti)showInputs();
-//System.err.println("~248");
+//System.err.println("~210");
 		computeNeighbors();
-//System.err.println("~250");
+//System.err.println("~212");
 		computeNotes();
-//System.err.println("~252");
+//System.err.println("~214");
 		hints();
-//System.err.println("~254");
-		presentation.displayBoard();
-//System.err.println("~256");
-		dialog();
+//System.err.println("~218");
+		presentation.doThePuzzle();
     }
 }
