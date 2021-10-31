@@ -9,11 +9,12 @@ interface AidPresentation{
 	void outln(String s);
 	void out(String s);
 	void displayBoard();
+	String presStyle();
 }
 
 /**
  *	Suduko aid. Input: a file of type sdku with exactly 9 lines, each 
- *	exactly 9 characters plus a newline. 90 bytes total.
+ *	exactly 9 characters plus a newline or carriage return. 90 bytes total.
  *	Use spaces or zeros for empty cells, numerals elsewhere.
  *	Example: s1.dku.
  */
@@ -33,11 +34,13 @@ static AidPresentation presentation;   // probably temporary, move to TTY/Graphi
 
     public static void Usage(){
     	System.out.println("Usage: java Aid [options] <inputfile> [<optionaloutputfile>]");
-    	System.out.println("Just the input file's name, not the sdk type.");
+    	System.out.println("\tJust the input file's name, not the sdk type.");
     	System.out.println("Options:");
 //    	System.out.println("\t-p -- show all pairs");
     	System.out.println("\t-m -- show matched pair hints");
     	System.out.println("\t-u -- show unique hints");
+    	System.out.println("\t-i -- show input values");
+    	System.out.println("\t-tty -- Use tty output, REQUIRED until graphics work");
 //    	System.out.println("\t-v -- verbose, mainly debug dumps");
     	System.out.println("Commands:   (the prompt is >> )");    	
     	System.out.println("	q -- quit");
@@ -128,12 +131,12 @@ static AidPresentation presentation;   // probably temporary, move to TTY/Graphi
 			outln("Unique:"+cell);
 		}
 	}
-
+//tty stuff  VVVVV
 	private static Cell getCellX(int[] x){
 		int row = x[1];
 		int col = x[2];
 		if(row<1 || row>9 || col<1 || col>9) {
-			System.err.println("Bad command");return null;
+			presentation.outln("Bad command");return null;
 		}
 		return puzl[row-1][col-1];
 	}
@@ -182,6 +185,8 @@ static AidPresentation presentation;   // probably temporary, move to TTY/Graphi
 			}
 		}
 	}
+//tty stuff  ^^^^^
+
 // dumps and main...
 	static void dumpAll(){
 		for(int row=0; row<9; ++row){
@@ -201,7 +206,7 @@ static AidPresentation presentation;   // probably temporary, move to TTY/Graphi
  */
 	public static void main(String[] mingled) throws IOException{
 		String filename=null;
-// Arguments...
+// sort arguments and options...
 		Arguments arguments = new Arguments(mingled); 
 		String[] args = arguments.getArgs();
 		String[] opts = arguments.getOpts();
@@ -217,18 +222,14 @@ static AidPresentation presentation;   // probably temporary, move to TTY/Graphi
     		Usage();
     		System.exit(0);
     	}
+		presentation = AidGraphic.instance();  //default presentation
 		for(int i=0; i<opts.length; ++i) {
 			String opt = opts[i];
 			if(opt.equals("-tty")){
-System.err.println("Aid~239: dash tty");
-				presentation = AidTTY.instance();
+				presentation = AidTTY.instance();    // overide
 			}
-			else{
-System.err.println("Aid~241: default graphic");
-				presentation = AidGraphic.instance();
-			}
-System.err.println("set all presentations here   <<<====");
-System.err.println("Aid~21 probably temporary");
+System.err.println("Aid~230: "+presentation.presStyle());
+//set all presentations here   ^^^^^^
 			for(int j=1; j<opt.length(); ++j) {
 				char op = opt.charAt(j);
 				switch(op){

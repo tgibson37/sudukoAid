@@ -17,7 +17,7 @@ class AidGraphic extends JPanel
 	public void displayBoard(){
 System.err.println("Graphic displayBoard");
 	}
-
+	public String presStyle(){ return "graphic style"; }
 }
 
 class MyFrame extends JFrame{
