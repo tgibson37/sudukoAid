@@ -5,15 +5,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+interface AidPresentation{
+	void outln(String s);
+	void out(String s);
+	void displayBoard();
+}
+
 /**
  *	Suduko aid. Input: a file of type sdku with exactly 9 lines, each 
  *	exactly 9 characters plus a newline. 90 bytes total.
  *	Use spaces or zeros for empty cells, numerals elsewhere.
  *	Example: s1.dku.
  */
-public class Aid{
+public class Aid {
+static AidPresentation presentation;   // probably temporary, move to TTY/Graphic
 	static String currentPath;
-    static Cell[][] puzl;
     static byte[] bytes;
 	public static final int ROW = 1;
 	public static final int COL = 2;
@@ -23,6 +29,7 @@ public class Aid{
 	private static Boolean optu = false;  // hints, unique
 	private static Boolean optm = false;  // hints, matched pair
 	private static Boolean optp = false;  // hints, pairs
+    public static Cell[][] puzl;
 
     public static void Usage(){
     	System.out.println("Usage: java Aid [options] <inputfile> [<optionaloutputfile>]");
@@ -38,6 +45,9 @@ public class Aid{
     	System.out.println("	Example: s472 sets cell at row 4, column 7 to value 2");
     	System.out.println("");
     }
+    
+    public static void outln(String s){ presentation.outln(s); } 
+    public static void out(String s){ presentation.out(s); } 
 
 // mainline...
 	static void createCells(){
@@ -66,11 +76,10 @@ public class Aid{
 			puzl[row][col].setOriginal();
 		}
 	}
-	static void showAll(){
+	static void showInputs(){
 		for(int row=0; row<9; ++row){
 			for(int col=0; col<9; ++col){
-				System.out.print(puzl[row][col].value);
-				System.out.print(" ");
+				System.out.print(puzl[row][col].value+" ");
 			}
 			System.out.println("");
 		}
@@ -95,7 +104,7 @@ public class Aid{
 			for(int i = 0; i<27; ++i){
 				Container con = Container.serial(i);
 				String hint = con.hintm();
-				if( hint!=null )System.out.println(hint);
+				if( hint!=null )outln(hint);
 			}
 		}
 	}
@@ -116,30 +125,10 @@ public class Aid{
 		while(it.hasNext()){
 			Cell c1 = (Cell)it.next();
 			String cell = c1.rowColPretty();
-			System.out.println("Unique:"+cell);
+			outln("Unique:"+cell);
 		}
 	}
 
-	static void prettyPrint(){	//I   render()
-		System.out.println(
-"=======================================================");
-		for(int row=0; row<9; ++row){
-			System.out.format("#");
-			for(int col=0; col<9; ++col){
-				System.out.print(puzl[row][col].prettyPrintNotes());
-			}
-			System.out.println("");
-			System.out.format("#");
-			for(int col=0; col<9; ++col){
-				System.out.print(puzl[row][col].prettyPrintValue());
-			}
-			System.out.println("");
-			if(row%3 != 2)System.out.println(
-"#------------------------------------------------------");
-			else System.out.println(
-"#======================================================");
-		}
-	}
 	private static Cell getCellX(int[] x){
 		int row = x[1];
 		int col = x[2];
@@ -152,13 +141,13 @@ public class Aid{
 		int value = x[3];
 		Cell c = getCellX(x);
 		if(c==null)return;
-		if(optv)System.out.println(c.toString()+" set to "+value);	//I msg
-		if(value<0 || value>9)System.out.println("bad value");  //I	msg
+		if(optv)outln(c.toString()+" set to "+value);	//I msg
+		if(value<0 || value>9)outln("bad value");  //I	msg
 		else {
 			c.setValue(value);
 			computeNotes();
 			hints();
-			prettyPrint();
+			presentation.displayBoard();
 		}
 	} 
 
@@ -171,7 +160,7 @@ public class Aid{
         BufferedReader reader =
             new BufferedReader(new InputStreamReader(System.in));
 		while(x[0] != 'q'){
-			System.out.print(">> ");
+			out(">> ");
 			try{
 				cmd = reader.readLine();
 			}catch(Exception e){
@@ -223,20 +212,32 @@ public class Aid{
     		Usage();
     		System.exit(0);
     	}
-    for(int i=0; i<opts.length; ++i) {
-    	String opt = opts[i];
-    	for(int j=1; j<opt.length(); ++j) {
-    		char op = opt.charAt(j);
-    		switch(op){
-    		case 'i': opti = true; break;
-    		case 'u': optu = true; break;
-    		case 'm': optm = true; break;
-    		case 'p': optp = true; break;
-    		case 'A': optu = optm = optp = true; break;
-    		default: System.out.println("bad option "+op);
-    		}
-    	}
-    }
+		for(int i=0; i<opts.length; ++i) {
+			String opt = opts[i];
+			if(opt.equals("-tty")){
+System.err.println("Aid~239: dash tty");
+				presentation = AidTTY.instance();
+			}
+			else{
+System.err.println("Aid~241: default graphic");
+				presentation = AidGraphic.instance();
+			}
+System.err.println("set all presentations here   <<<====");
+System.err.println("Aid~21 probably temporary");
+			for(int j=1; j<opt.length(); ++j) {
+				char op = opt.charAt(j);
+				switch(op){
+				case 'i': opti = true; break;
+				case 'u': optu = true; break;
+				case 'm': optm = true; break;
+				case 'p': optp = true; break;
+				case 'A': optu = optm = optp = true; break;
+				case 't':
+				case 'y': break;
+				default: outln("bad option "+op);
+				}
+			}
+		}
 // Process...
 //System.err.println("~240");
         createCells();
@@ -245,7 +246,7 @@ public class Aid{
 //System.err.println("~244");
 		processValues();
 //System.err.println("~246");
-		if(opti)showAll();
+		if(opti)showInputs();
 //System.err.println("~248");
 		computeNeighbors();
 //System.err.println("~250");
@@ -253,7 +254,7 @@ public class Aid{
 //System.err.println("~252");
 		hints();
 //System.err.println("~254");
-		prettyPrint();
+		presentation.displayBoard();
 //System.err.println("~256");
 		dialog();
     }

@@ -55,6 +55,11 @@ public class Cell{
 		}
 		return nts;
     }
+// Used by GCell for testing
+    public void setNotes(TreeSet<Integer> nts){
+    	notes=nts;
+System.out.println("Cell~61 notes: "+nts);
+    }
 // initializers, used my Aid's mainline after puzl[][] is defined
     public void computeNeighbors(Cell[][] c){
     	//block
