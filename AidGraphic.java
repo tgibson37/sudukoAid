@@ -18,7 +18,7 @@ System.err.println("Graphic: in displayBoard, not done yet");
 	}
 	public String presentationStyle(){ return "graphic style"; }
 	public void doThePuzzle(){
-System.err.println("Graphic: do the puzzle, not done yet");
+System.err.println("Graphics: not done yet, working on it. Use -tty option");
 	}
 }
 
