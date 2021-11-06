@@ -21,7 +21,7 @@ public class Cell{
 // used by set command
     public String setValue(int v){
     	if(!orig){
-			int[] n = notes();
+			int[] n = getNotes();
 			for(int i=0; i<n.length; ++i){
 				if(v==n[i]){
 					value=v;
@@ -47,7 +47,7 @@ public class Cell{
 /**	
  *	@return notes as int array
  */
-    public int[] notes(){
+    public int[] getNotes(){
     	List<Integer> arr = new ArrayList<>(notes);
 		int[] nts = new int[arr.size()];
 		for(int i = 0; i<nts.length; i++){
