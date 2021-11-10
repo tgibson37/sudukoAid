@@ -7,20 +7,20 @@ public class Cell{
     int value;
     ArrayList<Cell> neighbor = new ArrayList<Cell>();
     TreeSet<Integer> notes = new TreeSet<Integer>();
-    Boolean orig = false;
+    Boolean seed = false;
     
     public Cell(int r, int c){
     	row=r;col=c;
     }
 // initialization used using puzl inputs
-    public void initValue(int v){
+    public void seedValue(int v){
     	value=v;
-    	orig=true;
+    	seed=true;
     }
     public int getValue(){ return value; }
 // used by set command
     public String setValue(int v){
-    	if(!orig){
+    	if(!seed){
 			int[] n = getNotes();
 			for(int i=0; i<n.length; ++i){
 				if(v==n[i]){
@@ -30,9 +30,9 @@ public class Cell{
 			}
 			return "Value conflict";
 		}
-    	return "Cell value is orig";
+    	return "Cell value is seed";
     }
-//recommended tests: Use s1: s177 conflict, s133 orig, s183 OK
+//recommended tests: Use s1: s177 conflict, s133 seed, s183 OK
     
 /**	
  *	@return String formatted to show place, value, and notes
@@ -84,10 +84,11 @@ System.out.println("Cell~61 notes: "+nts);
 	}
 // used by Aid after reading input file
     public void setOriginal(){
-    	orig=true;
+    	seed=true;
     }
 // used by Aid's init, and by main play loop after each move
-    public void computeNotes(Cell[][] c){
+//    public void computeNotes(Cell[][] c){
+	public void computeNotes(){
     	if(value==0){
 			for(int i=1; i<10; ++i)notes.add(new Integer(i));
 			for(Cell cell : neighbor){

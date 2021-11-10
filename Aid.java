@@ -20,7 +20,7 @@ interface AidPresentation{
  *	Example: s1.dku.
  */
 public class Aid {
-static AidPresentation presentation;   // probably temporary, move to TTY/Graphic
+static AidPresentation presentation;
 	static String currentPath;
     static byte[] bytes;
 	public static final int ROW = 1;
@@ -53,7 +53,7 @@ static AidPresentation presentation;   // probably temporary, move to TTY/Graphi
     public static void outln(String s){ presentation.outln(s); } 
     public static void out(String s){ presentation.out(s); } 
 
-// mainline...
+// MAINLINE...
 	static void createCells(){
     	puzl = new Cell[9][9];
 		for(int row=0; row<9; ++row)
@@ -84,7 +84,7 @@ static AidPresentation presentation;   // probably temporary, move to TTY/Graphi
 			if(bytes[i]==32)continue;   // skip spaces
 			int row = i/10;
 			int col = i%10;
-			puzl[row][col].initValue(bytes[i]-48);
+			puzl[row][col].seedValue(bytes[i]-48);
 			puzl[row][col].setOriginal();
 		}
 	}
@@ -104,7 +104,8 @@ static AidPresentation presentation;   // probably temporary, move to TTY/Graphi
 	static void computeNotes(){
 		for(int row=0; row<9; ++row){
 			for(int col=0; col<9; ++col){
-				puzl[row][col].computeNotes(puzl);
+//				puzl[row][col].computeNotes(puzl);
+				puzl[row][col].computeNotes();
 			}
 		}
 	}
