@@ -14,7 +14,15 @@ class AidTTY implements AidPresentation{
     public void outln(String s){System.out.println(s);}
     public void displayBoard(){ prettyPrint(); };   
 
-//   renders the board, tty style
+// created all 81 Cells, row-col wise
+	public void createCells(){
+    	Aid.puzl = new Cell[9][9];
+		for(int row=0; row<9; ++row)
+			for(int col=0; col<9; ++col)
+				Aid.puzl[row][col] = new Cell(row,col);
+	}
+
+	//   renders the board, tty style
 	void prettyPrint(){	             
 		System.out.println("=======================================================");
 		for(int row=0; row<9; ++row){

@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 interface AidPresentation{
 	void outln(String s);
 	void out(String s);
+	void createCells();
 	void displayBoard();
 	String presentationStyle();
 	void doThePuzzle();
@@ -54,12 +55,6 @@ static AidPresentation presentation;
     public static void out(String s){ presentation.out(s); } 
 
 // MAINLINE...
-	static void createCells(){
-    	puzl = new Cell[9][9];
-		for(int row=0; row<9; ++row)
-			for(int col=0; col<9; ++col)
-				puzl[row][col] = new Cell(row,col);
-	}
 	public static Cell getCellX(int[] x){
 		int row = x[1];
 		int col = x[2];
@@ -200,21 +195,21 @@ static AidPresentation presentation;
 			}
 		}
 // Process...
-//System.err.println("~202");
-        createCells();
-//System.err.println("~204");
+System.err.println("~202");
+        presentation.createCells();
+System.err.println("~204");
 		readInitFile(filename);
-//System.err.println("~206");
+System.err.println("~206");
 		processValues();
-//System.err.println("~208");
+System.err.println("~208");
 		if(opti)showInputs();
-//System.err.println("~210");
+System.err.println("~210");
 		computeNeighbors();
-//System.err.println("~212");
+System.err.println("~212");
 		computeNotes();
-//System.err.println("~214");
+System.err.println("~214");
 		hints();
-//System.err.println("~218");
+System.err.println("~218");
 		presentation.doThePuzzle();
     }
 }

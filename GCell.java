@@ -12,47 +12,60 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-public class GCell extends JPanel
+public class GCell extends Cell
         //, ActionListener, MouseListener 
 {
 	int row, col;
 	int block,clInBl;
-	public GCell(int bl, int cl ){
+	JPanel pane;
+
+	// prereq: puzl[][] is available...
+	public void renderSeed(){
+		renderValue();
+	}
+	// render as button which will clear the value.
+	public void renderValue(){
+		pane.removeAll();
+		pane.setLayout(new GridLayout(1,1));
+		JButton v = new JButton(""+value);
+		pane.add(v);
+	}
+
+	public GCell(int bl, int cl){
+		super(bl,cl);
 		block = bl;
 		clInBl = cl;
 		row = (bl/3)*3 + cl/3;
 		col = (bl%3)*3 + cl%3;
+		pane = new JPanel();
 		Border blackline = BorderFactory.createLineBorder(Color.black,2);
-		this.setBorder(blackline);
+		pane.setBorder(blackline);
 		setButtons();
 	}
+	public JPanel getPane(){ return pane; }
+	public int getRow(){ return row; }
+	public int getCol(){ return col; }
 	// adds all 9 buttons
 	public void setButtons(){
 		String label;
-		setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		setLayout(new GridLayout(3,3));
+		pane.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		pane.setLayout(new GridLayout(3,3));
 		for(int i=0; i<9; ++i){
-//			if(value==0){
+//System.err.print(" "+value);
+			if(value==0){
 				label = ""+(i+1);
-//			} else {
-//				label = "";
-//			}
+			} else {
+				label = "";
+			}
 			JButton b = new JButton(label);
 			Insets s = new Insets(0,0,0,0);
 			b.setMargin(s);
-			this.add(b);
+			pane.add(b);
 		}
-	}
-	// prereq: puzl[][] is available...
-	public void renderSeedValue(){
-	}
-	public void renderValue(){
 	}
 
 /*
 		int value;
-		row = (bl/3)*3 + cl/3;
-		col = (bl%3)*3 + cl%3;
 		value = Aid.puzl[row][col].getValue();
 		if(value>0){   //value
 			this.add(new JPanel());   // and paint the value
@@ -96,7 +109,9 @@ public class GCell extends JPanel
 			JPanel block = new JPanel(new GridLayout(3,3));
 			block.setBorder(blackline);
 			for(int cl=0; cl<9; ++cl){
-				block.add(new GCell(bl,cl)); //test
+				GCell cell = new GCell(bl,cl);
+//				cell.setPosition(bl,cl);
+				block.add(cell.getPane());
 			}
 			board.add(block);
 		}
@@ -115,7 +130,8 @@ public class GCell extends JPanel
 			JPanel block = new JPanel(new GridLayout(3,3));
 			block.setBorder(blackline);
 			for(int cl=0; cl<9; ++cl){
-				block.add(new GCell(bl,cl)); //test
+				block.add(new GCell()); //test four
+				cell.setPosition(bl,cl);
 			}
 			board.add(block);
 		}
