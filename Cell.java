@@ -11,6 +11,7 @@ public class Cell{
     
     public Cell(int r, int c){
     	row=r;col=c;
+//if(r<3)if(c<3)System.err.print("Cell~14 rc"+r+""+c);
     }
 // initialization used using puzl inputs
     public void seedValue(int v){
@@ -43,11 +44,10 @@ public class Cell{
     		+"("+notes.toString()+")"
     		+"="+Integer.toString(value);
     }
-    public String rowColPretty(){	return " "+(row+1)+" "+(col+1); }
-/**	
- *	@return notes as int array
- */
-    public int[] getNotes(){
+    public String rowColPretty(){	
+    	return " "+(row+1)+" "+(col+1); 
+    }
+	public int[] getNotes(){
     	List<Integer> arr = new ArrayList<>(notes);
 		int[] nts = new int[arr.size()];
 		for(int i = 0; i<nts.length; i++){
@@ -55,11 +55,12 @@ public class Cell{
 		}
 		return nts;
     }
-// Used by GCell for testing
+/* Used by GCell for testing
     public void setNotes(TreeSet<Integer> nts){
     	notes=nts;
 System.out.println("Cell~61 notes: "+nts);
     }
+*/
 // initializers, used my Aid's mainline after puzl[][] is defined
     public void computeNeighbors(Cell[][] c){
     	//block
@@ -87,7 +88,6 @@ System.out.println("Cell~61 notes: "+nts);
     	seed=true;
     }
 // used by Aid's init, and by main play loop after each move
-//    public void computeNotes(Cell[][] c){
 	public void computeNotes(){
     	if(value==0){
 			for(int i=1; i<10; ++i)notes.add(new Integer(i));
@@ -96,13 +96,17 @@ System.out.println("Cell~61 notes: "+nts);
 			}
     	}
     	else notes = new TreeSet<Integer>();   // empty list
+if(row>1)return;
+if(col>2)return;
+//System.err.print("Cell~101 "+row+""+col+": ");
+//System.err.println("row/col "+row+""+col+" notes"+notes);
     }
     public Iterator<Integer> getNotesIterator(){ return notes.iterator(); }
 	public String notesAsString(){
 		int spaces = 6;  // includes the trailing vertical
 		int i=0;
 		byte[] bytes = new byte[9];
-    	Iterator<Integer> nit = getNotesIterator();
+		Iterator<Integer> nit = getNotesIterator();
 		while(nit.hasNext()) {
 			int aNote = nit.next()+48;
 			bytes[i++] = (byte)aNote; 
@@ -143,3 +147,28 @@ System.out.println("Cell~61 notes: "+nts);
 		System.err.print("\n");
 	}
 }
+/*
+	public void computeNotes(){
+if((row==0)&&(col==4))dumpStuff();
+if((row==0)&&(col==5))dumpStuff();
+    	if(value==0){
+System.err.print("Cell~92 computeNotes: "+this);
+			for(int i=1; i<10; ++i)notes.add(new Integer(i));
+			for(Cell cell : neighbor){
+if((row==0)&&(col==4))dumpStuff2(cell,cell.value);
+				notes.remove(new Integer(cell.value));
+			}
+System.err.println("~101 "+notes);
+    	}
+    	else notes = new TreeSet<Integer>();   // empty list
+if((row==0)&&(col==4))dumpStuff();
+if((row==0)&&(col==5))dumpStuff();
+    }
+public void dumpStuff(){
+	System.err.print("Cell~92/105 compute notes before/after: ");
+	System.err.println("row/col "+row+""+col+" notes"+notes);
+}
+public void dumpStuff2(Cell cl, int value){
+	System.err.println("222:Cell "+cl+" value "+value);
+}
+*/

@@ -9,6 +9,7 @@ interface AidPresentation{
 	void outln(String s);
 	void out(String s);
 	void createCells();
+	void buildBoard();
 	void displayBoard();
 	String presentationStyle();
 	void doThePuzzle();
@@ -21,14 +22,14 @@ interface AidPresentation{
  *	Example: s1.dku.
  */
 public class Aid {
-static AidPresentation presentation;
+	static AidPresentation presentation;
 	static String currentPath;
     static byte[] bytes;
 	public static final int ROW = 1;
 	public static final int COL = 2;
 	public static final int BLK = 3;
 	private static Boolean opti = false;  // show inputs
-	public static Boolean optv = false;  // verbose
+	public static Boolean optv = false;   // show values
 	private static Boolean optu = false;  // hints, unique
 	private static Boolean optm = false;  // hints, matched pair
 	private static Boolean optp = false;  // hints, pairs
@@ -73,22 +74,40 @@ static AidPresentation presentation;
         	System.exit(1);
         }
 	}
-	static void processValues(){
+// ASSUMES each line is EXACTLY 10 bytes. 
+	static void processSeeds(){
+//System.err.println("Aid~78");
 		for(int i=0; i<89; ++i) {
+			if(opti)System.out.printf("%c",(bytes[i]));
 			if(bytes[i]==10)continue;   // skip newlines
+			if(bytes[i]==13)continue;   // skip newlines
 			if(bytes[i]==32)continue;   // skip spaces
 			int row = i/10;
 			int col = i%10;
-			puzl[row][col].seedValue(bytes[i]-48);
+			int value = bytes[i]-48;
+//System.err.print(""+i);
+//System.err.print(": "+row+""+col+"="+value+";  ");
+			puzl[row][col].seedValue(value);
 			puzl[row][col].setOriginal();
 		}
 	}
-	static void showInputs(){
+	static void showValues(){
 		for(int row=0; row<9; ++row){
 			for(int col=0; col<9; ++col){
 				System.out.print(puzl[row][col].value+" ");
 			}
 			System.out.println("");
+		}
+	}
+	//debug aid, prereq: Cell puzl[9][9] fully populated.
+	public static void dumpRCV(String label){
+		System.err.println(label);
+		for(int r=0; r<9; ++r) {
+			for(int c=0; c<9; ++c){
+				Cell cl = Aid.puzl[r][c];
+				System.err.print(" "+cl.row+""+cl.col+" "+cl.value);
+			}
+			System.err.println("");
 		}
 	}
 	static void computeNeighbors(){
@@ -99,7 +118,7 @@ static AidPresentation presentation;
 	static void computeNotes(){
 		for(int row=0; row<9; ++row){
 			for(int col=0; col<9; ++col){
-//				puzl[row][col].computeNotes(puzl);
+//System.err.print("Aid~102: "+row+""+col+":  ");
 				puzl[row][col].computeNotes();
 			}
 		}
@@ -195,14 +214,16 @@ static AidPresentation presentation;
 			}
 		}
 // Process...
-System.err.println("~202");
+System.err.println("~200");
         presentation.createCells();
+System.err.println("~202");
+        presentation.buildBoard();
 System.err.println("~204");
 		readInitFile(filename);
 System.err.println("~206");
-		processValues();
+		processSeeds();
 System.err.println("~208");
-		if(opti)showInputs();
+		if(optv)showValues();
 System.err.println("~210");
 		computeNeighbors();
 System.err.println("~212");

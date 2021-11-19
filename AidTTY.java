@@ -21,7 +21,9 @@ class AidTTY implements AidPresentation{
 			for(int col=0; col<9; ++col)
 				Aid.puzl[row][col] = new Cell(row,col);
 	}
-
+// satisfies the interface...
+	public void buildBoard(){
+	}
 	//   renders the board, tty style
 	void prettyPrint(){	             
 		System.out.println("=======================================================");
@@ -44,8 +46,8 @@ class AidTTY implements AidPresentation{
 		int value = x[3];
 		Cell c = Aid.getCellX(x);
 		if(c==null)return;
-		if(Aid.optv)System.out.println(c.toString()+" set to "+value);	//I msg
-		if(value<0 || value>9)System.out.println("bad value");  //I	msg
+		if(Aid.optv)System.out.println(c.toString()+" set to "+value);
+		if(value<0 || value>9)System.out.println("bad value");
 		else {
 			String bad = c.setValue(value);
 			if(bad!=null){
@@ -59,6 +61,7 @@ class AidTTY implements AidPresentation{
 		}
 	}
 	public void doThePuzzle(){
+Aid.dumpRCV("tty~64");
 		prettyPrint();
 		dialog();
 	}

@@ -15,8 +15,7 @@ import javax.swing.border.Border;
 public class GCell extends Cell
         //, ActionListener, MouseListener 
 {
-	int row, col;
-	int block,clInBl;
+	int row, col;    // zero based
 	JPanel pane;
 
 	// prereq: puzl[][] is available...
@@ -28,42 +27,42 @@ public class GCell extends Cell
 		pane.removeAll();
 		pane.setLayout(new GridLayout(1,1));
 		JButton v = new JButton(""+value);
+		v.setFont(new Font("Arial", Font.BOLD, 18));
 		pane.add(v);
 	}
 
-	public GCell(int bl, int cl){
-		super(bl,cl);
-		block = bl;
-		clInBl = cl;
-		row = (bl/3)*3 + cl/3;
-		col = (bl%3)*3 + cl%3;
+	public GCell(int row, int col){
+		super(row,col);
 		pane = new JPanel();
 		Border blackline = BorderFactory.createLineBorder(Color.black,2);
 		pane.setBorder(blackline);
-		setButtons();
+//if(row<3)if(col<3)System.err.println(" GCell~45: "+bl+""+cl+""+row+""+col);
 	}
+
 	public JPanel getPane(){ return pane; }
 	public int getRow(){ return row; }
 	public int getCol(){ return col; }
-	// adds all 9 buttons
+	// adds all buttons == notes   BUG: notes is garbage
 	public void setButtons(){
-		String label;
 		pane.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		pane.setLayout(new GridLayout(3,3));
-		for(int i=0; i<9; ++i){
-//System.err.print(" "+value);
-			if(value==0){
-				label = ""+(i+1);
+//if((row==0)&&(col==4))dumpStuffG();
+//if((row==0)&&(col==5))dumpStuffG();
+		for(int nn=1; nn<10; ++nn){
+			if(notes.contains(nn)){
+				String label = ""+nn;
+				JButton b = new JButton(label);
+				Insets s = new Insets(0,0,0,0);
+				b.setMargin(s);
+				pane.add(b);
 			} else {
-				label = "";
+				pane.add(new JPanel());
 			}
-			JButton b = new JButton(label);
-			Insets s = new Insets(0,0,0,0);
-			b.setMargin(s);
-			pane.add(b);
 		}
 	}
-
+public void dumpStuffG(){
+	System.err.println("GCell~54/69 notes: "+notes);
+}
 /*
 		int value;
 		value = Aid.puzl[row][col].getValue();
