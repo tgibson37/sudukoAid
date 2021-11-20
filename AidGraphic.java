@@ -8,7 +8,6 @@ class AidGraphic extends JPanel implements AidPresentation {
 	int SIZE = 600;
 	JFrame frame;
 	JPanel board;
-//	GCell gcarray[][] = new GCell[9][9];		// cell access
 	public static AidPresentation instance() {	// public access
 		return (AidPresentation)me;
 	}
@@ -41,13 +40,10 @@ class AidGraphic extends JPanel implements AidPresentation {
 			for(int cl=0; cl<9; ++cl){
 				row = (bl/3)*3+cl/3;
 				col = (bl%3)*3+cl%3;
-System.err.print("  "+bl+""+cl+"<->"+row+""+col);
 				GCell cell = (GCell)Aid.puzl[row][col];
 				block.add(cell.getPane());
 			}
-System.err.println("");
 			board.add(block);
-//System.err.println("  AG~38, row/col. Order of creation IS: bl,cl");
 		}
 	}
 	public void outln(String s){}
@@ -59,7 +55,6 @@ System.err.println("");
 				GCell gc = (GCell)Aid.puzl[row][col]; 
 				value = gc.getValue();
 				if(value>0){   //value
-//System.out.print(" "+row+""+col+"="+value);
 					gc.renderValue();
 				}
 				else {         // buttons
@@ -71,7 +66,6 @@ System.err.println("");
 	}
 	public String presentationStyle(){ return "graphic style"; }
 	public void doThePuzzle(){
-Aid.dumpRCV("gra~74");
 		displayBoard();
 	}
 }

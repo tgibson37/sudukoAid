@@ -36,7 +36,6 @@ public class GCell extends Cell
 		pane = new JPanel();
 		Border blackline = BorderFactory.createLineBorder(Color.black,2);
 		pane.setBorder(blackline);
-//if(row<3)if(col<3)System.err.println(" GCell~45: "+bl+""+cl+""+row+""+col);
 	}
 
 	public JPanel getPane(){ return pane; }
@@ -46,8 +45,6 @@ public class GCell extends Cell
 	public void setButtons(){
 		pane.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		pane.setLayout(new GridLayout(3,3));
-//if((row==0)&&(col==4))dumpStuffG();
-//if((row==0)&&(col==5))dumpStuffG();
 		for(int nn=1; nn<10; ++nn){
 			if(notes.contains(nn)){
 				String label = ""+nn;
@@ -63,16 +60,9 @@ public class GCell extends Cell
 public void dumpStuffG(){
 	System.err.println("GCell~54/69 notes: "+notes);
 }
-/*
-		int value;
-		value = Aid.puzl[row][col].getValue();
-		if(value>0){   //value
-			this.add(new JPanel());   // and paint the value
-		}
-		else {         // buttons
-		}
-*/
-	
+
+//  GCell standalone tests. Keep these for awhile...
+
 /* test one: one GCell w/ 9 buttons
 	public static void main(String[] args) {   // just a GCell, 9 buttons
 		JFrame frame = new JFrame("A Cell");
@@ -142,15 +132,3 @@ public void dumpStuffG(){
 	}
 */
 }
-/* GOALS...
-		remove notes, 
-		setSeed, 
-		setValue, 
-		iterate over neighbors...
-			for(Cell cell : neighbor){...}
-				works in Cell
-				NEEDed in GCell
-					GCell extends JPanel, not Cell
-					Can Cell provide a service to GCell ???
-					Cell computes. GCell displays !!!
-*/

@@ -96,10 +96,6 @@ System.out.println("Cell~61 notes: "+nts);
 			}
     	}
     	else notes = new TreeSet<Integer>();   // empty list
-if(row>1)return;
-if(col>2)return;
-//System.err.print("Cell~101 "+row+""+col+": ");
-//System.err.println("row/col "+row+""+col+" notes"+notes);
     }
     public Iterator<Integer> getNotesIterator(){ return notes.iterator(); }
 	public String notesAsString(){
@@ -147,28 +143,3 @@ if(col>2)return;
 		System.err.print("\n");
 	}
 }
-/*
-	public void computeNotes(){
-if((row==0)&&(col==4))dumpStuff();
-if((row==0)&&(col==5))dumpStuff();
-    	if(value==0){
-System.err.print("Cell~92 computeNotes: "+this);
-			for(int i=1; i<10; ++i)notes.add(new Integer(i));
-			for(Cell cell : neighbor){
-if((row==0)&&(col==4))dumpStuff2(cell,cell.value);
-				notes.remove(new Integer(cell.value));
-			}
-System.err.println("~101 "+notes);
-    	}
-    	else notes = new TreeSet<Integer>();   // empty list
-if((row==0)&&(col==4))dumpStuff();
-if((row==0)&&(col==5))dumpStuff();
-    }
-public void dumpStuff(){
-	System.err.print("Cell~92/105 compute notes before/after: ");
-	System.err.println("row/col "+row+""+col+" notes"+notes);
-}
-public void dumpStuff2(Cell cl, int value){
-	System.err.println("222:Cell "+cl+" value "+value);
-}
-*/

@@ -39,15 +39,13 @@ public class Aid {
     	System.out.println("Usage: java Aid [options] <inputfile> [<optionaloutputfile>]");
     	System.out.println("\tJust the input file's name, not the sdk type.");
     	System.out.println("Options:");
-//    	System.out.println("\t-p -- show all pairs");
-    	System.out.println("\t-m -- show matched pair hints");
-    	System.out.println("\t-u -- show unique hints");
+//    	System.out.println("\t-m -- show matched pair hints");
+//    	System.out.println("\t-u -- show unique hints");
     	System.out.println("\t-i -- show input values");
     	System.out.println("\t-tty -- Use tty output, REQUIRED until graphics work");
-//    	System.out.println("\t-v -- verbose, mainly debug dumps");
-    	System.out.println("Commands:   (the prompt is >> )");    	
-    	System.out.println("	q -- quit");
-    	System.out.println("	sRCV (3 digits: row, column, value)");
+    	System.out.println("	tty commands:   (the prompt is >> )");    	
+    	System.out.println("		q -- quit");
+    	System.out.println("		sRCV (3 digits: row, column, value)");
     	System.out.println("	Example: s472 sets cell at row 4, column 7 to value 2");
     	System.out.println("");
     }
@@ -76,7 +74,6 @@ public class Aid {
 	}
 // ASSUMES each line is EXACTLY 10 bytes. 
 	static void processSeeds(){
-//System.err.println("Aid~78");
 		for(int i=0; i<89; ++i) {
 			if(opti)System.out.printf("%c",(bytes[i]));
 			if(bytes[i]==10)continue;   // skip newlines
@@ -85,8 +82,6 @@ public class Aid {
 			int row = i/10;
 			int col = i%10;
 			int value = bytes[i]-48;
-//System.err.print(""+i);
-//System.err.print(": "+row+""+col+"="+value+";  ");
 			puzl[row][col].seedValue(value);
 			puzl[row][col].setOriginal();
 		}
@@ -118,7 +113,6 @@ public class Aid {
 	static void computeNotes(){
 		for(int row=0; row<9; ++row){
 			for(int col=0; col<9; ++col){
-//System.err.print("Aid~102: "+row+""+col+":  ");
 				puzl[row][col].computeNotes();
 			}
 		}
@@ -197,8 +191,6 @@ public class Aid {
 			if(opt.equals("-tty")){
 				presentation = AidTTY.instance();    // overide
 			}
-//System.err.println("Aid~185: "+presentation.presentationStyle());
-//set all presentations here   ^^^^^^
 			for(int j=1; j<opt.length(); ++j) {
 				char op = opt.charAt(j);
 				switch(op){
@@ -214,23 +206,23 @@ public class Aid {
 			}
 		}
 // Process...
-System.err.println("~200");
+//System.err.println("~200");
         presentation.createCells();
-System.err.println("~202");
+//System.err.println("~202");
         presentation.buildBoard();
-System.err.println("~204");
+//System.err.println("~204");
 		readInitFile(filename);
-System.err.println("~206");
+//System.err.println("~206");
 		processSeeds();
-System.err.println("~208");
+//System.err.println("~208");
 		if(optv)showValues();
-System.err.println("~210");
+//System.err.println("~210");
 		computeNeighbors();
-System.err.println("~212");
+//System.err.println("~212");
 		computeNotes();
-System.err.println("~214");
+//System.err.println("~214");
 		hints();
-System.err.println("~218");
+//System.err.println("~218");
 		presentation.doThePuzzle();
     }
 }

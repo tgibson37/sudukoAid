@@ -61,7 +61,6 @@ class AidTTY implements AidPresentation{
 		}
 	}
 	public void doThePuzzle(){
-Aid.dumpRCV("tty~64");
 		prettyPrint();
 		dialog();
 	}
