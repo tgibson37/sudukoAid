@@ -171,8 +171,8 @@ public class Aid {
 		String filename=null;
 // sort arguments and options...
 		Arguments arguments = new Arguments(mingled); 
-		String[] args = arguments.getArgs();
-		String[] opts = arguments.getOpts();
+		String[] args = arguments.getArgsAsArray();
+		String[] opts = arguments.getOptsAsArray();
 
 		if(args.length>1){
 			PrintStream o = new PrintStream(new File(args[1]));
