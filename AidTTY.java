@@ -13,6 +13,10 @@ class AidTTY implements AidPresentation{
     public void out(String s){System.out.print(s);}
     public void outln(String s){System.out.println(s);}
     public void displayBoard(){ prettyPrint(); };   
+    public void updateNotes(Cell c){ 
+		Aid.computeNotes();
+		prettyPrint(); 
+    };   
 
 // created all 81 Cells, row-col wise
 	public void createCells(){
@@ -42,7 +46,8 @@ class AidTTY implements AidPresentation{
 			else System.out.println("#======================================================");
 		}
 	}
-	private void cmdSet(int[] x){
+/*
+private void cmdSet(int[] x){
 		int value = x[3];
 		Cell c = Aid.getCellX(x);
 		if(c==null)return;
@@ -60,11 +65,12 @@ class AidTTY implements AidPresentation{
 			}
 		}
 	}
-	public void doThePuzzle(){
+*/
+public void doThePuzzle(){
 		prettyPrint();
 		dialog();
 	}
-	private static void cmdDump(int[] x){
+	private static void cmdDump(int row, int col){
 	} 
 
 	private void dialog(){
@@ -80,12 +86,13 @@ class AidTTY implements AidPresentation{
 				System.err.println(e.toString());
 				System.exit(1);
 			}
-			for(int i=0;i<cmd.length();++i) 
-				x[i]=cmd.charAt(i)-48; // ascii digit to int
+			for(int i=1;i<cmd.length();++i) {
+				x[i-1]=cmd.charAt(i)-48; // ascii digit to int
+			}
 			switch(cmd.charAt(0)){
 				case 'q': System.exit(0);
-				case 's': cmdSet(x); break;
-				case 'd': cmdDump(x); break;
+				case 's': Aid.cmdSet(x[0],x[1],x[2]); break;
+				case 'd': cmdDump(x[0],x[1]); break;
 				default: continue;
 			}
 		}

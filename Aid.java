@@ -11,6 +11,7 @@ interface AidPresentation{
 	void createCells();
 	void buildBoard();
 	void displayBoard();
+	void updateNotes(Cell cl);
 	String presentationStyle();
 	void doThePuzzle();
 }
@@ -147,6 +148,21 @@ public class Aid {
 			Cell c1 = (Cell)it.next();
 			String cell = c1.rowColPretty();
 			outln("Unique:"+cell);
+		}
+	}
+	public static void cmdSet(int row, int col, int value){
+		Cell c = puzl[row-1][col-1];
+		if(c==null)return;
+	if(Aid.optv)outln(c.toString()+" set to "+value);
+		if(value<0 || value>9)outln("bad value");
+		else {
+			String bad = c.setValue(value);
+			if(bad!=null){
+				outln(bad);
+			}
+			else{
+				presentation.updateNotes(c);
+			}
 		}
 	}
 

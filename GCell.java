@@ -1,34 +1,31 @@
 import java.awt.*;
 import java.util.*;
 import javax.swing.*;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.LayoutManager;
 import java.io.*;
-import javax.swing.BorderFactory;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.border.Border;
+import java.awt.event.*;
 
-public class GCell extends Cell
-        //, ActionListener, MouseListener 
+public class GCell extends Cell 
+	//implements ActionListener, MouseListener 
 {
 	int row, col;    // zero based
 	JPanel pane;
+	NoteButton nba[] = new NoteButton[9];
 
-	// prereq: puzl[][] is available...
-	public void renderSeed(){
-		renderValue();
+/*	// prereq: puzl[][] is available...
+	public void setSeed(){
+		setValue();
 	}
-	// render as button which will clear the value.
-	public void renderValue(){
+*/
+	// render as button with label value.
+	public String setValue(int value){
+		this.value = value;
 		pane.removeAll();
 		pane.setLayout(new GridLayout(1,1));
 		JButton v = new JButton(""+value);
 		v.setFont(new Font("Arial", Font.BOLD, 18));
 		pane.add(v);
+		return null;
 	}
 
 	public GCell(int row, int col){
@@ -41,24 +38,51 @@ public class GCell extends Cell
 	public JPanel getPane(){ return pane; }
 	public int getRow(){ return row; }
 	public int getCol(){ return col; }
-	// adds all buttons == notes   BUG: notes is garbage
+
+// add button for each note
 	public void setButtons(){
 		pane.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		pane.setLayout(new GridLayout(3,3));
-		for(int nn=1; nn<10; ++nn){
+		for(int nn=1; nn<10; ++nn){    // external number
 			if(notes.contains(nn)){
-				String label = ""+nn;
-				JButton b = new JButton(label);
+				NoteButton b = new NoteButton(this,nn);
+				nba[nn-1] = b;  // handle needed for removal, internal number
+				b.addActionListener(b);
 				Insets s = new Insets(0,0,0,0);
 				b.setMargin(s);
+				String label = ""+nn;
+				b.setText(label);
 				pane.add(b);
 			} else {
 				pane.add(new JPanel());
 			}
 		}
 	}
-public void dumpStuffG(){
-	System.err.println("GCell~54/69 notes: "+notes);
+	public void removeButton(int nn){   // external nn
+			NoteButton b = nba[nn-1];
+		if(notes.contains(nn)){
+			pane.remove(b);
+			pane.revalidate();
+			pane.repaint();
+		}
+	}
+}
+
+class NoteButton extends JButton implements ActionListener {
+	Cell cell;
+	int value;
+	public NoteButton(Cell cl, int vl){
+		super();
+		cell = cl;
+		value = vl;
+	}
+	public String toString(){
+		return ("NoteButton " + cell.row +""+ cell.col);
+	}
+// cmdSet uses external row/col number
+	public void actionPerformed(ActionEvent e){
+		Aid.cmdSet(cell.row+1, cell.col+1, value);
+	}
 }
 
 //  GCell standalone tests. Keep these for awhile...
@@ -90,7 +114,6 @@ public void dumpStuffG(){
 */
 
 /* test three: full board
-*/
 	public static void main(String[] args) {
 	Border blackline = BorderFactory.createLineBorder(Color.black,3);
 		JPanel board = new JPanel(new GridLayout(3,3));
@@ -110,6 +133,7 @@ public void dumpStuffG(){
 		frame.setSize(600,640);
 		frame.setVisible(true);
 	}
+*/
 
 /* test four: seedValue
 	public static void main(String[] args) {
@@ -131,4 +155,4 @@ public void dumpStuffG(){
 		frame.setVisible(true);
 	}
 */
-}
+

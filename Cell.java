@@ -11,15 +11,14 @@ public class Cell{
     
     public Cell(int r, int c){
     	row=r;col=c;
-//if(r<3)if(c<3)System.err.print("Cell~14 rc"+r+""+c);
     }
-// initialization used using puzl inputs
+
     public void seedValue(int v){
     	value=v;
     	seed=true;
     }
     public int getValue(){ return value; }
-// used by set command
+
     public String setValue(int v){
     	if(!seed){
 			int[] n = getNotes();
@@ -33,7 +32,6 @@ public class Cell{
 		}
     	return "Cell value is seed";
     }
-//recommended tests: Use s1: s177 conflict, s133 seed, s183 OK
     
 /**	
  *	@return String formatted to show place, value, and notes
@@ -55,12 +53,6 @@ public class Cell{
 		}
 		return nts;
     }
-/* Used by GCell for testing
-    public void setNotes(TreeSet<Integer> nts){
-    	notes=nts;
-System.out.println("Cell~61 notes: "+nts);
-    }
-*/
 // initializers, used my Aid's mainline after puzl[][] is defined
     public void computeNeighbors(Cell[][] c){
     	//block

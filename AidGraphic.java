@@ -55,7 +55,7 @@ class AidGraphic extends JPanel implements AidPresentation {
 				GCell gc = (GCell)Aid.puzl[row][col]; 
 				value = gc.getValue();
 				if(value>0){   //value
-					gc.renderValue();
+					gc.setValue(value);
 				}
 				else {         // buttons
 					gc.setButtons();
@@ -63,6 +63,11 @@ class AidGraphic extends JPanel implements AidPresentation {
 			}
 		}
 		frame.setVisible(true);
+	}
+	public void updateNotes(Cell cl){
+		for(Cell nbr : cl.neighbor){
+			((GCell)nbr).removeButton(cl.value);
+		}
 	}
 	public String presentationStyle(){ return "graphic style"; }
 	public void doThePuzzle(){
